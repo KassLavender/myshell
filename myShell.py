@@ -3,58 +3,50 @@
 import os
 
 from myPrograms import myPrograms
+from myCommands import myCommands
 
-
-myCommands = ["help", "list", "quit or exit"]
 
 programMap = {
-    "1": myPrograms.binaryToNumberProgram(),
-    "2": myPrograms.numberToBinaryProgram()
+    "1": myPrograms.binaryToIntegerProgram(),
+    "2": myPrograms.integerToBinaryProgram()
 }
 
+commandMap = {
+#    "1": myCommands.help(),
+    "2": myCommands.listAll({},{}),
+    "3": myCommands.clearTerminal(),
+    "4": myCommands.pageBreak()
+}
 
-def clear():
-    """Clear the terminal."""
-    os.system('cls||clear')
-
-def pageBreak():
-    """prints a long line and then moves to the next line of terminal."""
-    print("—————————————————————————————")
-
-
-def listAll():
-    """Lists available programs and commands in this program."""
-    print("Available programs:")
-    for i in programMap.keys():
-        print (" " + str(i) + ": " + programMap[i].name)
-
-    print("\n" + "Available commands:")
-    for i in range(len(myCommands)):
-        print (" " + myCommands[i])
-    pageBreak()
-
-
-clear()
-listAll()
+clearTerminalCommand = myCommands.clearTerminal()
+listAllCommand = myCommands.listAll(programMap, commandMap)
+pageBreakCommand = myCommands.pageBreak()
 
 
 
+clearTerminalCommand.operation()
+listAllCommand.operation()
 
 
 
 while (userInput := input("\n" + "Type a command or program number: ")) not in {"quit", "exit"}:
 
     userInput = userInput.lower()
-    pageBreak()
+    pageBreakCommand.operation()
     print()
 
     match userInput:
         case "help" | "info":
-            print("Type \"[command].help\" or \"[program].help\" for info.")
+            print()
+
+            #prompt a command or program number, uses .help()
         
-        case "list" | "ls":
-            clear()
-            listAll()
+        case "list" | "ls" | "list all" | "list" | "listall":
+            clearTerminalCommand.operation()
+            listAllCommand.operation()
+
+        case "pagebreak" | "break":
+            pageBreakCommand.operation()
 
         case _:
                 try:

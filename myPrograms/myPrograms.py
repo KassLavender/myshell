@@ -1,8 +1,4 @@
-#!/opt/homebrew/bin/python3.13 
-
-import os
-os.system('cls||clear')
-
+#!/opt/homebrew/bin/python3.13
 
 
 class myProgram:
@@ -12,37 +8,39 @@ class myProgram:
 
 
 
-class binaryToNumberProgram(myProgram):
-
+class binaryToIntegerProgram(myProgram):
+    """In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100.
+    
+    When given a string of binary values, outputs the decimal integer that would be represented in Python."""
     def __init__(self):
-        self.name = "binaryToNumber"
+        self.name = "binaryToInteger"
 
-        self.prompt = "Enter binary number: "
+        self.prompt = "Enter binary integer: "
 
-        self.manual = ["In order to allow bit-wise operations, python represents negative numbers e.g. -4 as 111....11100.", " ","When given a string of binary values, outputs the decimal number that would be represented in Python."]
+        self.manual = ["In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100.", " ","When given a string of binary values, outputs the decimal integer that would be represented in Python."]
 
-        self.operation = self.binaryToNumber
+        self.operation = self.binaryToInteger
 
-    def binaryToNumber(self, numberStr: str) -> str:
+    def binaryToInteger(self, integerStr: str) -> str:
 
         sign = 1
 
         try:
-            bitList = [int(x) for x in numberStr]
+            bitList = [int(x) for x in integerStr]
         except:
-            raise ValueError("Not a number.")
+            raise ValueError("Not an integer.")
 
         try:
-            match int(bitList[0]):
+            match bitList[0]:
                 case 0: sign = 0
                 case 1: sign = 1
-                case _: raise ValueError(f"Not a binary number.")
+                case _: raise ValueError(f"Not a binary integer.")
 
             for i in range(len(bitList)):
                 match int(bitList[i]):
                     case 0: bitList[i] = "1"
                     case 1: bitList[i] = "0"
-                    case _: raise ValueError(f"Not binary number.")
+                    case _: raise ValueError(f"Not a binary integer.")
         except Exception as e:
             raise e
 
@@ -52,24 +50,48 @@ class binaryToNumberProgram(myProgram):
 
 
 
-
-
-
-
-class numberToBinaryProgram(myProgram):
-
+class integerToBinaryProgram(myProgram):
+    """"In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100.
+    
+    When given a decimal integer, outputs the binary integer that would be represented in Python."""
     def __init__(self):
-        self.name = "numberToBinary"
+        self.name = "integerToBinary"
 
-        self.prompt = "Enter decimal number: "
+        self.prompt = "Enter decimal integer: "
 
-        self.manual = ["In order to allow bit-wise operations, python represents negative numbers e.g. -4 as 111....11100.", " ","When given a decimal integer, outputs the binary number that would be represented in Python."]
+        self.manual = ["In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100.", " ","When given a decimal integer, outputs the binary integer that would be represented in Python."]
 
-        self.operation = self.numberToBinary
+        self.operation = self.integerToBinary
     
-    def numberToBinary(self, number: int) -> int:
-        return 4
-    
+    def integerToBinary(self, integerStr: str) -> str:
+        
+        bitList = []
+        sign = 0
+
+        try:
+            userInt = int(integerStr)
+            if userInt < 0:
+                sign = 1
+                userInt = -userInt
+            if float(userInt).is_integer() == False:
+                raise ValueError("Not an integer.")
+        except:
+            raise ValueError("Not an integer.")
+        
+        try:
+            while userInt > 0:
+                if (userInt % 2 == 1):
+                    bitList.insert(0, 1)
+                    userInt = (userInt - 1) / 2
+                else:
+                    bitList.insert(0, 0)
+                    userInt = userInt / 2
+            bitList.insert(0, sign)
+        except:
+            raise ValueError("Unexpected error.")
+
+        return ''.join(str(x) for x in bitList)
+        
 
 
 
