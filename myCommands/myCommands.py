@@ -1,15 +1,11 @@
-#!/opt/homebrew/bin/python3.13
-
 import os
-
-
 
 class myCommand:
     def help (self) -> print:
         for line in self.manual:
             try:
                 print (line)
-            except: 
+            except:
                 raise Exception("An unexpected error occured with printing \"help\".")
 
 
@@ -46,7 +42,7 @@ class pageBreak(myCommand):
         try:
             print("—————————————————————————————")
         except:
-            raise Exception(f"An unexpected error occurred with \"pageBreak".)
+            raise Exception(f"An unexpected error occurred with \"pageBreak\".")
 
 
 

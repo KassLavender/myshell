@@ -1,7 +1,5 @@
-#!/opt/homebrew/bin/python3.13
-
-
 class myProgram:
+    """Program object."""
     def help (self) -> list[str]:
         for line in self.manual:
             print (line)
@@ -80,7 +78,7 @@ class integerToBinaryProgram(myProgram):
         
         try:
             while userInt > 0:
-                if (userInt % 2 == 1):
+                if (userInt % 2):
                     bitList.insert(0, 1)
                     userInt = (userInt - 1) / 2
                 else:
