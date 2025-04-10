@@ -51,7 +51,7 @@ while (userInput := input("\n" + "Type a command or program number: ")) not in {
             case _:
                 try:
                     if userInput not in programDictionary:
-                        print ("Not a command nor program.")
+                        print("Not a command nor program.")
                         continue
 
                 except ValueError:

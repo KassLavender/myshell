@@ -1,8 +1,11 @@
 class myProgram:
     """Program object."""
-    def help (self) -> list[str]:
+    def __init__(self):
+        self.manual = self.__doc__
+    
+    def help(self) -> list[str]:
         for line in self.manual:
-            print (line)
+            print(line)
 
 
 
@@ -15,9 +18,9 @@ class binaryToIntegerProgram(myProgram):
 
         self.prompt = "Enter binary integer: "
 
-        self.manual = ["In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100.", " ","When given a string of binary values, outputs the decimal integer that would be represented in Python."]
-
         self.operation = self.binaryToInteger
+
+        super().__init__()
 
     def binaryToInteger(self, integerStr: str) -> str:
 
@@ -32,13 +35,13 @@ class binaryToIntegerProgram(myProgram):
             match bitList[0]:
                 case 0: sign = 0
                 case 1: sign = 1
-                case _: raise ValueError(f"Not a binary integer.")
+                case _: raise ValueError("Not a binary integer.")
 
             for i in range(len(bitList)):
                 match int(bitList[i]):
                     case 0: bitList[i] = "1"
                     case 1: bitList[i] = "0"
-                    case _: raise ValueError(f"Not a binary integer.")
+                    case _: raise ValueError("Not a binary integer.")
         except Exception as e:
             raise e
 
@@ -57,9 +60,9 @@ class integerToBinaryProgram(myProgram):
 
         self.prompt = "Enter decimal integer: "
 
-        self.manual = ["In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100.", " ","When given a decimal integer, outputs the binary integer that would be represented in Python."]
-
         self.operation = self.integerToBinary
+
+        super().__init__()
     
     def integerToBinary(self, integerStr: str) -> str:
         
@@ -71,8 +74,6 @@ class integerToBinaryProgram(myProgram):
             if userInt < 0:
                 sign = 1
                 userInt = -userInt
-            if float(userInt).is_integer() == False:
-                raise ValueError("Not an integer.")
         except:
             raise ValueError("Not an integer.")
         
@@ -89,8 +90,3 @@ class integerToBinaryProgram(myProgram):
             raise ValueError("Unexpected error.")
 
         return ''.join(str(x) for x in bitList)
-        
-
-
-
-

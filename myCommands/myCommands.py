@@ -1,10 +1,14 @@
 import os
 
 class myCommand:
-    def help (self) -> print:
+    """A command."""
+    def __init__(self):
+        self.manual = self.__doc__
+
+    def help(self) -> print:
         for line in self.manual:
             try:
-                print (line)
+                print(line)
             except:
                 raise Exception("An unexpected error occured with printing \"help\".")
 
@@ -16,9 +20,9 @@ class clearTerminal(myCommand):
     def __init__(self):
         self.name = "clear"
 
-        self.manual = ["Clears the terminal."]
-
         self.operation = self.clearTerminal
+
+        super().__init__()
 
     def clearTerminal(self):
         try:
@@ -33,16 +37,16 @@ class pageBreak(myCommand):
 
     def __init__(self):
         self.name = "pageBreak"
-
-        self.manual = ["Prints a long line and then moves to the next line of the terminal."]
         
         self.operation = self.pageBreak
+
+        super().__init__()
 
     def pageBreak(self) -> print:
         try:
             print("—————————————————————————————")
         except:
-            raise Exception(f"An unexpected error occurred with \"pageBreak\".")
+            raise Exception("An unexpected error occurred with \"pageBreak\".")
 
 
 
@@ -53,25 +57,24 @@ class listAll(myCommand):
     def __init__(self, programMap: map, commandMap: map):
         self.name = "listAll"
 
-        self.manual = ["Lists all available programs and commands currently available.", " ", "Clears the terminal beforehand for legibility."]
-
         self.programMap = programMap
 
         self.commandMap = commandMap
 
         self.operation = self.listAll
+
+        super().__init__()
     
     def listAll(self) -> print:
             try:
                 print("Available programs:")
                 for i in self.programMap.keys():
-                    print (f" {str(i)}: {self.programMap[i].name}")
+                    print(f" {str(i)}: {self.programMap[i].name}")
 
                 print("\n" + "Available commands:")
                 for i in self.commandMap.keys():
-                    print (f" {self.commandMap[i].name}")
+                    print(f" {self.commandMap[i].name}")
                 
-                (commandRun := pageBreak()).pageBreak()
+                pageBreak().operation()
             except:
-                raise Exception(f"An unexpected error occurred with \"listAll\".")
-
+                raise Exception("An unexpected error occurred with \"listAll\".")
