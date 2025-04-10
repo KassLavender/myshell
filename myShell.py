@@ -1,73 +1,64 @@
 #!/opt/homebrew/bin/python3.13
 
-import os
-
 from myPrograms import myPrograms
+from myCommands import myCommands
+from myUtils import myUtils
 
 
-myCommands = ["help", "list", "quit or exit"]
+programDictionary = {
+    "1": myPrograms.binaryToIntegerProgram(),
+    "2": myPrograms.integerToBinaryProgram()
+}
 
-programMap = {
-    "1": myPrograms.binaryToNumberProgram(),
-    "2": myPrograms.numberToBinaryProgram()
+commandDictionary = {
+    "list": myCommands.listAll({},{}),
+    "clear": myCommands.clearTerminal()
 }
 
 
-def clear():
-    """Clear the terminal."""
-    os.system('cls||clear')
 
-def pageBreak():
-    """prints a long line and then moves to the next line of terminal."""
-    print("—————————————————————————————")
+try:
+    clearTerminalCommand = myCommands.clearTerminal()
+    listAllCommand = myCommands.listAll(programDictionary, commandDictionary)
+    pageBreakCommand = myCommands.pageBreak()
 
-
-def listAll():
-    """Lists available programs and commands in this program."""
-    print("Available programs:")
-    for i in programMap.keys():
-        print (" " + str(i) + ": " + programMap[i].name)
-
-    print("\n" + "Available commands:")
-    for i in range(len(myCommands)):
-        print (" " + myCommands[i])
-    pageBreak()
-
-
-clear()
-listAll()
-
-
-
+    clearTerminalCommand.operation()
+    listAllCommand.operation()
+except Exception as e:
+    myUtils.error(e)
 
 
 
 while (userInput := input("\n" + "Type a command or program number: ")) not in {"quit", "exit"}:
+    try:
+        userInput = userInput.lower()
+        pageBreakCommand.operation()
+        print()
 
-    userInput = userInput.lower()
-    pageBreak()
-    print()
+        match userInput:    
+            case "help" | "info":
+                print()
 
-    match userInput:
-        case "help" | "info":
-            print("Type \"[command].help\" or \"[program].help\" for info.")
-        
-        case "list" | "ls":
-            clear()
-            listAll()
+                #prompt a command or program number, uses .help()
+            
+            case "list" | "ls" | "list all" | "list" | "listall":
+                clearTerminalCommand.operation()
+                listAllCommand.operation()
 
-        case _:
+            case "clear":
+                clearTerminalCommand.operation()
+
+            case _:
                 try:
-                    if userInput not in programMap:
-                        print ("Not a command nor program.")
+                    if userInput not in programDictionary:
+                        print("Not a command nor program.")
                         continue
 
                 except ValueError:
                     print("Unexpected error.")
 
-                try:
-                    programArgument = input(programMap[userInput].prompt)
-                        
-                    print(programMap[userInput].operation(programArgument))
-                except Exception as e:
-                    print (f"There was a problem executing the program: {e}")
+                programArgument = input(programDictionary[userInput].prompt)
+                print(programDictionary[userInput].operation(programArgument))
+
+    except Exception as e:
+        myUtils.error(e)
