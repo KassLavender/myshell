@@ -1,31 +1,31 @@
 #!/opt/homebrew/bin/python3.13
 
-from myPrograms import myPrograms
-from myCommands import myCommands
-from myUtils import myUtils
+from myprograms import myprograms
+from mycommands import mycommands
+from myutils import myutils
 
 
 programDictionary = {
-    "1": myPrograms.binaryToIntegerProgram(),
-    "2": myPrograms.integerToBinaryProgram()
+    "1": myprograms.binaryToIntegerProgram(),
+    "2": myprograms.integerToBinaryProgram()
 }
 
 commandDictionary = {
-    "list": myCommands.listAll({},{}),
-    "clear": myCommands.clearTerminal()
+    "list": mycommands.listAll({},{}),
+    "clear": mycommands.clearTerminal()
 }
 
 
 
 try:
-    clearTerminalCommand = myCommands.clearTerminal()
-    listAllCommand = myCommands.listAll(programDictionary, commandDictionary)
-    pageBreakCommand = myCommands.pageBreak()
+    clearTerminalCommand = mycommands.clearTerminal()
+    listAllCommand = mycommands.listAll(programDictionary, commandDictionary)
+    pageBreakCommand = mycommands.pageBreak()
 
     clearTerminalCommand.operation()
     listAllCommand.operation()
 except Exception as e:
-    myUtils.error(e)
+    myutils.error(e)
 
 
 
@@ -61,4 +61,4 @@ while (userInput := input("\n" + "Type a command or program number: ")) not in {
                 print(programDictionary[userInput].operation(programArgument))
 
     except Exception as e:
-        myUtils.error(e)
+        myutils.error(e)
