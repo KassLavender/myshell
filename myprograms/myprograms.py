@@ -22,12 +22,12 @@ class binaryToIntegerProgram(myProgram):
 
         super().__init__()
 
-    def binaryToInteger(self, integerStr: str) -> str:
+    def binaryToInteger(self, integerStr: str | int) -> int:
 
         sign = 1
 
         try:
-            bitList = [int(x) for x in integerStr]
+            bitList = [int(x) for x in str(integerStr)]
         except:
             raise ValueError("Not an integer.")
 
@@ -64,11 +64,10 @@ class integerToBinaryProgram(myProgram):
 
         super().__init__()
     
-    def integerToBinary(self, integerStr: str) -> str:
+    def integerToBinary(self, integerStr: str | int) -> int:
         
         bitList = []
         sign = 0
-
         try:
             userInt = int(integerStr)
             if userInt < 0:
@@ -89,4 +88,4 @@ class integerToBinaryProgram(myProgram):
         except:
             raise ValueError("Unexpected error.")
 
-        return ''.join(str(x) for x in bitList)
+        return int(''.join(str(x) for x in bitList))
