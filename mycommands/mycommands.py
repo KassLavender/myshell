@@ -1,80 +1,85 @@
-import os
+from subprocess import run as subprocess_run
 
-class myCommand:
+class MyCommand:
     """A command."""
     def __init__(self):
         self.manual = self.__doc__
 
     def help(self) -> print:
-        for line in self.manual:
-            try:
+        try:
+            for line in self.manual:
                 print(line)
-            except:
-                raise Exception("An unexpected error occured with printing \"help\".")
+        except Exception as e:
+            raise Exception(f"An unexpected error occured with printing help info: {e}")
 
 
 
-class clearTerminal(myCommand):
+class ClearTerminal(MyCommand):
     """Clears the terminal."""
 
     def __init__(self):
         self.name = "clear"
 
-        self.operation = self.clearTerminal
+        self.operation = self.ClearTerminal
 
         super().__init__()
 
-    def clearTerminal(self):
+    def run(self, arg, shell=False):
+        subprocess_run(arg,shell=shell)
+
+    def ClearTerminal(self):
         try:
-            os.system('cls||clear')
-        except:
-            raise Exception("An unexpected error occurred with clearTerminal.")
+            self.run("clear||cls", shell=True)
+        except Exception as e:
+            raise Exception(f"An unexpected error occurred with ClearTerminal: {e}")
 
 
 
-class pageBreak(myCommand):
+class PageBreak(MyCommand):
     """Prints a long line and then moves to the next line of the terminal."""
 
     def __init__(self):
-        self.name = "pageBreak"
+        self.name = "PageBreak"
         
-        self.operation = self.pageBreak
+        self.operation = self.PageBreak
 
         super().__init__()
 
-    def pageBreak(self) -> print:
+    def PageBreak(self) -> print:
         try:
             print("—————————————————————————————")
-        except:
-            raise Exception("An unexpected error occurred with \"pageBreak\".")
+        except Exception as e:
+            raise Exception(f"An unexpected error occurred with \"PageBreak\": {e}")
 
 
 
-class listAll(myCommand):
+class ListAll(MyCommand):
     """Lists all available programs and commands currently available.
     
     Clears the terminal beforehand for legibility."""
     def __init__(self, programMap: map, commandMap: map):
-        self.name = "listAll"
+        self.name = "ListAll"
 
-        self.programMap = programMap
+        try:
+            self.programMap = dict(programMap)
+            self.commandMap = dict(commandMap)
+        except:
+            raise TypeError("ListAll only accepts map objects.")
 
-        self.commandMap = commandMap
-
-        self.operation = self.listAll
+        self.operation = self.ListAll
 
         super().__init__()
     
-    def listAll(self) -> print:
+    def ListAll(self) -> print:
             try:
-                print("Available programs:")
-                for i in self.programMap.keys():
-                    print(f" {str(i)}: {self.programMap[i].name}")
-
-                print("\n" + "Available commands:")
-                for i in self.commandMap.keys():
-                    print(f" {self.commandMap[i].name}")
-                
-                pageBreak().operation()
-            except:
-                raise Exception("An unexpected error occurred with \"listAll\".")
+                if self.programMap:
+                    print("Available programs:")
+                    for i in self.programMap.keys():
+                        print(f" {str(i)}: {self.programMap[i].name}")
+                    print()
+                if self.commandMap:
+                    print("Available commands:")
+                    for i in self.commandMap.keys():
+                        print(f" {self.commandMap[i].name}")
+            except Exception as e:
+                raise Exception(f"An unexpected error occurred with \"ListAll\": {e}")

@@ -6,19 +6,20 @@ from context import myprograms, myutils
 
 
 
-class test_binaryMaskToDecimalProgram(unittest.TestCase):
-
-    def convert(self, data: str | int, answer: str | int):
+class test_BinaryMaskToDecimalProgram(unittest.TestCase):
+    def convert(self, data: str | int, answer: int):
         try:
-            program = myprograms.binaryMaskToDecimalProgram()
-        except Exception as e:
-            myutils.error(e)
-        
-        self.assertEqual(program.operation(data), int(answer))
+            program = myprograms.BinaryMaskToDecimalProgram()
+        except* Exception as e:
+            print("There was a problem with testing the BinaryMaskToDecimal program.")
+            myutils.Error(*e.exceptions)
+            
+        if 'program' in locals():
+            self.assertEqual(program.operation(data), answer)
 
     def errorHandling(self, data: str | int):
         try:
-            program = myprograms.binaryMaskToDecimalProgram()
+            program = myprograms.BinaryMaskToDecimalProgram()
             program.operation(data)
         except Exception as e:
             raise e
@@ -49,36 +50,37 @@ class test_binaryMaskToDecimalProgram(unittest.TestCase):
         self.convert(data, answer)
 
     def test_error_notInt(self):
-        data = "abc"
-        answerStr = "There was a problem executing the program: Not an integer.\n"
-        errorStr = ""
+        data = "I am a silly cat"
+        answerStr = "Not an integer."
+        error = []
         
         try:
             self.errorHandling(data)
-        except Exception as e:
-            try:
-                errorStr = myutils.exceptionOutputExtraction(e)
-            except Exception as e:
-                #print("There was a problem while testing \"Not an integer\" error handling.")
-                myutils.error(e)
+        except* Exception as e:
+            error = [*e.exceptions]
         
-        self.assertEqual(answerStr, errorStr)
+        if len(error) == 1:
+            self.assertEqual(str(error[0]), answerStr)
+        else:
+            print("There was a problem while testing \"Not an integer\" error handling.")
+            myutils.Error(*error)
 
     def test_error_notBinaryInt(self):
         data = "102"
-        answerStr = "There was a problem executing the program: Not a binary integer.\n"
-        errorStr = ""
+        answerStr = "Not a binary integer."
+        error = []
 
         try:
             self.errorHandling(data)
-        except Exception as e:
-            try:
-                errorStr = myutils.exceptionOutputExtraction(e)
-            except Exception as f:
-                print("There was a problem while testing \"Not a binary integer\" error handling.")
-                myutils.error(f)
-    
-        self.assertEqual(answerStr, errorStr)
+        except* Exception as e:
+                error = [*e.exceptions]
+
+        if len(error) == 1:
+            self.assertEqual(str(error[0]), answerStr)
+        else:
+            print("There was a problem while testing \"Not a binary integer\" error handling.")
+            myutils.Error(*error)
+
 
 
 if __name__ == '__main__':

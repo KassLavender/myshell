@@ -4,27 +4,30 @@ class myProgram:
         self.manual = self.__doc__
     
     def help(self) -> list[str]:
-        for line in self.manual:
-            print(line)
+        try:
+            for line in self.manual:
+                print(line)
+        except Exception as e:
+            raise Exception(f"An unexpected error with printing help info: {e}")
 
 
 
-class binaryMaskToDecimalProgram(myProgram):
+class BinaryMaskToDecimalProgram(myProgram):
     """In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100, where 100 is equivalent to 11100 and so forth.
     
     When given a string of binary values, outputs the decimal integer that would be represented in Python after demasking.
     
     The first bit in the string of binary values denotes the sign (0 is positive, 1 is negative)."""
     def __init__(self):
-        self.name = "binaryMaskToDecimal"
+        self.name = "BinaryMaskToDecimal"
 
         self.prompt = "Enter a binary integer, prefaced with a signing bit (0 is positive): "
 
-        self.operation = self.binaryMaskToDecimal
+        self.operation = self.BinaryMaskToDecimal
 
         super().__init__()
 
-    def binaryMaskToDecimal(self, integerStr: str | int) -> int:
+    def BinaryMaskToDecimal(self, integerStr: str | int) -> int:
         sign = 1
 
         try:
@@ -63,22 +66,22 @@ class binaryMaskToDecimalProgram(myProgram):
 
 
 
-class decimalToBinaryMaskProgram(myProgram):
+class DecimalToBinaryMaskProgram(myProgram):
     """"In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100, where 100 is equivalent to 11100 and so forth.
     
     When given a decimal integer, outputs the string of binary values that would be represented in Python after masking.
     
     The first bit denotes the sign (0 is positive, 1 is negative)."""
     def __init__(self):
-        self.name = "decimalToBinaryMask"
+        self.name = "DecimalToBinaryMask"
 
         self.prompt = "Enter a decimal integer: "
 
-        self.operation = self.decimalToBinaryMask
+        self.operation = self.DecimalToBinaryMask
 
         super().__init__()
     
-    def decimalToBinaryMask(self, integerStr: str | int) -> str:  
+    def DecimalToBinaryMask(self, integerStr: str | int) -> str:  
         bitList = []
         sign = 0
 

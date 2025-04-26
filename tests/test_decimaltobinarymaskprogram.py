@@ -6,19 +6,19 @@ from context import myprograms, myutils
 
 
 
-class test_decimalToBinaryMaskProgram(unittest.TestCase):
-    
-    def convert(self, data: str | int, answer: str | int):
+class test_DecimalToBinaryMaskProgram(unittest.TestCase):
+    def convert(self, data: str | int, answer: str):
         try:
-            program = myprograms.decimalToBinaryMaskProgram()
-        except Exception as e:
-            myutils.error(e)
-
+            program = myprograms.DecimalToBinaryMaskProgram()
+        except* Exception as e:
+            print("There was a problem with testing the DecimalToBinaryMask program.")
+            myutils.Error(*e.exceptions)
+        finally:
             self.assertEqual(program.operation(data), answer)
     
     def errorHandling(self, data: str | int):
         try:
-            program = myprograms.decimalToBinaryMaskProgram()
+            program = myprograms.DecimalToBinaryMaskProgram()
             program.operation(data)
         except Exception as e:
             raise e
@@ -54,21 +54,20 @@ class test_decimalToBinaryMaskProgram(unittest.TestCase):
         self.convert(data, answer)
 
     def test_error_notInt(self):
-        data = "abc"
-        answerStr = "There was a problem executing the program: Not an integer.\n"
-        errorStr = ""
+        data = "123 I am a silly cat"
+        answerStr = "Not an integer."
+        error = []
         
         try:
             self.errorHandling(data)
-        except Exception as e:
-            try:
-                errorStr = myutils.exceptionOutputExtraction(e)
-            except Exception as e:
-                #print("There was a problem while testing \"Not an integer\" error handling.")
-                myutils.error(e)
-        
-        self.assertEqual(answerStr, errorStr)
-
+        except* Exception as e:
+            error = [*e.exceptions]
+            
+        if len(error) == 1:
+            self.assertEqual(str(error[0]), answerStr)
+        else:
+            print("There was a problem while testing \"Not an integer\" error handling.")
+            myutils.Error(*error)
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,38 +1,40 @@
 #!/opt/homebrew/bin/python3.13
 
-from myprograms import myprograms
 from mycommands import mycommands
+from myprograms import myprograms
 from myutils import myutils
 
 
 programDictionary = {
-    "1": myprograms.binaryMaskToDecimalProgram(),
-    "2": myprograms.decimalToBinaryMaskProgram()
+    "1": myprograms.BinaryMaskToDecimalProgram(),
+    "2": myprograms.DecimalToBinaryMaskProgram()
 }
 
 commandDictionary = {
-    "list": mycommands.listAll({},{}),
-    "clear": mycommands.clearTerminal()
+    "list": mycommands.ListAll({},{}),
+    "clear": mycommands.ClearTerminal()
 }
 
 
 
 try:
-    clearTerminalCommand = mycommands.clearTerminal()
-    listAllCommand = mycommands.listAll(programDictionary, commandDictionary)
-    pageBreakCommand = mycommands.pageBreak()
+    ClearTerminalCommand = mycommands.ClearTerminal()
+    ListAllCommand = mycommands.ListAll(programDictionary, commandDictionary)
+    PageBreakCommand = mycommands.PageBreak()
 
-    clearTerminalCommand.operation()
-    listAllCommand.operation()
+    ClearTerminalCommand.operation()
+    ListAllCommand.operation()
+    PageBreakCommand.operation()
 except Exception as e:
-    myutils.error(e)
+    myutils.Error(e)
+    quit()
 
 
 
 while (userInput := input("\n" + "Type a command or program number: ")) not in {"quit", "exit"}:
     try:
         userInput = userInput.lower()
-        pageBreakCommand.operation()
+        PageBreakCommand.operation()
         print()
 
         match userInput:    
@@ -42,11 +44,12 @@ while (userInput := input("\n" + "Type a command or program number: ")) not in {
                 #prompt a command or program number, uses .help()
             
             case "list" | "ls" | "list all" | "list" | "listall":
-                clearTerminalCommand.operation()
-                listAllCommand.operation()
+                ClearTerminalCommand.operation()
+                ListAllCommand.operation()
+                PageBreakCommand.operation()
 
-            case "clear":
-                clearTerminalCommand.operation()
+            case "clear" | "cls":
+                ClearTerminalCommand.operation()
 
             case _:
                 try:
@@ -61,4 +64,4 @@ while (userInput := input("\n" + "Type a command or program number: ")) not in {
                 print(programDictionary[userInput].operation(programArgument))
 
     except Exception as e:
-        myutils.error(e)
+        myutils.Error(e)
