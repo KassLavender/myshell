@@ -6,8 +6,8 @@ from myutils import myutils
 
 
 programDictionary = {
-    "1": myprograms.binaryToIntegerProgram(),
-    "2": myprograms.integerToBinaryProgram()
+    "1": myprograms.binaryMaskToDecimalProgram(),
+    "2": myprograms.decimalToBinaryMaskProgram()
 }
 
 commandDictionary = {

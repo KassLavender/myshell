@@ -9,25 +9,26 @@ class myProgram:
 
 
 
-class binaryToIntegerProgram(myProgram):
-    """In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100.
+class binaryMaskToDecimalProgram(myProgram):
+    """In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100, where 100 is equivalent to 11100 and so forth.
     
-    When given a string of binary values, outputs the decimal integer that would be represented in Python."""
+    When given a string of binary values, outputs the decimal integer that would be represented in Python after demasking.
+    
+    The first bit in the string of binary values denotes the sign (0 is positive, 1 is negative)."""
     def __init__(self):
-        self.name = "binaryToInteger"
+        self.name = "binaryMaskToDecimal"
 
-        self.prompt = "Enter binary integer: "
+        self.prompt = "Enter a binary integer, prefaced with a signing bit (0 is positive): "
 
-        self.operation = self.binaryToInteger
+        self.operation = self.binaryMaskToDecimal
 
         super().__init__()
 
-    def binaryToInteger(self, integerStr: str | int) -> int:
-
+    def binaryMaskToDecimal(self, integerStr: str | int) -> int:
         sign = 1
 
         try:
-            bitList = [int(x) for x in str(integerStr)]
+            bitList = [int(i) for i in str(integerStr)]
         except:
             raise ValueError("Not an integer.")
 
@@ -38,45 +39,60 @@ class binaryToIntegerProgram(myProgram):
                 case _: raise ValueError("Not a binary integer.")
 
             for i in range(len(bitList)):
-                match int(bitList[i]):
-                    case 0: bitList[i] = "1"
-                    case 1: bitList[i] = "0"
-                    case _: raise ValueError("Not a binary integer.")
+                if sign == 1:
+                    # Flip bits for negative binary masks.
+                    match int(bitList[i]):
+                        case 0: bitList[i] = "1"
+                        case 1: bitList[i] = "0"
+                        case _: raise ValueError("Not a binary integer.")
+                else:
+                    match int(bitList[i]):
+                        case 0: bitList[i] = "0"
+                        case 1: bitList[i] = "1"
+                        case _: raise ValueError("Not a binary integer.")
+
+            # Converts bitList into a decimal integer.
+            match (int(sign)):
+                case 0: return (int("".join(bitList), 2))
+                # Add 1 for two's complement.
+                case 1: return -(int("".join(bitList), 2) + 1)
+                case _: raise Exception("Unexpected casing error.")
         except Exception as e:
             raise e
 
-        match (int(sign)):
-            case 0: return (int("".join(bitList), 2) - 1)
-            case 1: return -(int("".join(bitList), 2) + 1)
 
 
 
-class integerToBinaryProgram(myProgram):
-    """"In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100.
+class decimalToBinaryMaskProgram(myProgram):
+    """"In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100, where 100 is equivalent to 11100 and so forth.
     
-    When given a decimal integer, outputs the binary integer that would be represented in Python."""
+    When given a decimal integer, outputs the string of binary values that would be represented in Python after masking.
+    
+    The first bit denotes the sign (0 is positive, 1 is negative)."""
     def __init__(self):
-        self.name = "integerToBinary"
+        self.name = "decimalToBinaryMask"
 
-        self.prompt = "Enter decimal integer: "
+        self.prompt = "Enter a decimal integer: "
 
-        self.operation = self.integerToBinary
+        self.operation = self.decimalToBinaryMask
 
         super().__init__()
     
-    def integerToBinary(self, integerStr: str | int) -> int:
-        
+    def decimalToBinaryMask(self, integerStr: str | int) -> str:  
         bitList = []
         sign = 0
+
         try:
             userInt = int(integerStr)
             if userInt < 0:
                 sign = 1
-                userInt = -userInt
+                # Two's complement for negative decimal integers.
+                userInt = -userInt - 1
         except:
             raise ValueError("Not an integer.")
         
         try:
+            # Converts the decimal number into a binary list.
             while userInt > 0:
                 if (userInt % 2):
                     bitList.insert(0, 1)
@@ -84,8 +100,18 @@ class integerToBinaryProgram(myProgram):
                 else:
                     bitList.insert(0, 0)
                     userInt = userInt / 2
-            bitList.insert(0, sign)
-        except:
-            raise ValueError("Unexpected error.")
+            
+            # Flips bits for negative numbers.
+            if sign == 1:
+                for i in range(len(bitList)):
+                    match bitList[i]:
+                        case 1: bitList[i] = 0
+                        case 0: bitList[i] = 1
 
-        return int(''.join(str(x) for x in bitList))
+            # Inserts the case-signifying bit.
+            bitList.insert(0, sign)
+
+            # Has to be a string, as positive binary integers are prefaced with 0.
+            return ''.join(str(x) for x in bitList)
+        except:
+            raise Exception("Unexpected calculation error.")
