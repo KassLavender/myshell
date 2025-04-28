@@ -2,17 +2,22 @@
 
 import unittest
 
-from context import myutils, mycommands
-
-from tests import *
-#from tests import __all__
+from context import *
+import tests
 
 
 
-suite = unittest.defaultTestLoader.discover(test_error.__path__)
+myTests = {}
+loader = unittest.TestLoader()
+for t in tests.__all__:
+    myTests[t] = loader.loadTestsFromName(t)
 
+testRunner = unittest.runner.TextTestRunner()
 
-
+for t in myTests:
+    print(t)
+    testRunner.run(myTests[t])
+    print()
 
 # Somehow bring in every test_* class in the tests folder.
 # Run test_outputextractor first.
@@ -22,6 +27,3 @@ suite = unittest.defaultTestLoader.discover(test_error.__path__)
 
 
 
-if __name__ == '__main__':
-
-    unittest.TextTestRunner().run(suite)

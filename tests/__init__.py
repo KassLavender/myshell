@@ -1,6 +1,6 @@
 __all__ = [# myutils
-           "test_error",
            "test_outputextractor",
+           "test_error",
     
             # myprograms
             "test_binarymasktodecimalprogram",
