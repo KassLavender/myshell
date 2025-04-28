@@ -17,15 +17,18 @@ When given a decimal integer, outputs the string of binary values that would be 
 The first bit denotes the sign (0 is positive, 1 is negative).
 
 ### Available Commands:
-**listall:**
+**ListAll:**
 Lists all available programs and commands currently available.
 Clears the terminal beforehand for legibility.
 **ClearTerminal:**
-Clears the terminal
+Clears the terminal.
 
 ### Utilities:
-**error:**
+**Error:**
 Error handling, prints the associated exception.
 
 **ExceptionOutputExtractor**
 """Exception handling utility. Returns exception output converted to a string."""
+
+### Other Features:
+Implements robust unittesting for all commands, programs, and utilities.
