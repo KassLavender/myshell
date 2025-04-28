@@ -1,7 +1,6 @@
-__all__ = [# myutils
-           "test_outputextractor",
-           "test_error",
-    
+__keyTests__ = ["test_outputextractor", "test_error"]
+
+__remainingTests__ = [
             # myprograms
             "test_binarymasktodecimalprogram",
             "test_decimaltobinarymaskprogram",
