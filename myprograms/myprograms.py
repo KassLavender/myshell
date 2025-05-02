@@ -29,40 +29,40 @@ class BinaryMaskToDecimalProgram(myProgram):
 
     def BinaryMaskToDecimal(self, integerStr: str | int) -> int:
         sign = 1
+        self.bitList = integerStr
 
         try:
             bitList = [int(i) for i in str(integerStr)]
         except:
             raise ValueError("Not an integer.")
+        else:
+            # Checks if there's any values in the list that aren't 0 or 1
+            if list(filter(lambda x: x not in [0,1], bitList)):
+                raise ValueError("Not a binary integer.")
 
         try:
             match bitList[0]:
                 case 0: sign = 0
                 case 1: sign = 1
-                case _: raise ValueError("Not a binary integer.")
 
-            for i in range(len(bitList)):
+            for i, val in enumerate(bitList):
                 if sign == 1:
                     # Flip bits for negative binary masks.
-                    match int(bitList[i]):
+                    match val:
                         case 0: bitList[i] = "1"
                         case 1: bitList[i] = "0"
-                        case _: raise ValueError("Not a binary integer.")
                 else:
-                    match int(bitList[i]):
+                    match val:
                         case 0: bitList[i] = "0"
                         case 1: bitList[i] = "1"
-                        case _: raise ValueError("Not a binary integer.")
-
+            
             # Converts bitList into a decimal integer.
-            match (int(sign)):
+            match (sign):
                 case 0: return (int("".join(bitList), 2))
                 # Add 1 for two's complement.
-                case 1: return -(int("".join(bitList), 2) + 1)
-                case _: raise Exception("Unexpected casing error.")
+                case 1: return -(int("".join((bitList)), 2) + 1)
         except Exception as e:
             raise e
-
 
 
 
