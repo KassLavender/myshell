@@ -16,7 +16,7 @@ class MyCommand:
 
 
 class ClearTerminal(MyCommand):
-    """Clears the terminal."""
+    """Clears the terminal. Works on posix and nt-like systems."""
 
     def __init__(self):
         self.name = "clear"

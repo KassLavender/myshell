@@ -68,7 +68,7 @@ class BinaryMaskToDecimalProgram(myProgram):
 class DecimalToBinaryMaskProgram(myProgram):
     """"In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100, where 100 is equivalent to 11100 and so forth.
     
-    When given a decimal integer, outputs the string of binary values that would be represented in Python after masking.
+    When given a decimal integer, outputs the string of binary values that would be represented in Python after masking up towards the nearest byte.
     
     The first bit denotes the sign (0 is positive, 1 is negative)."""
     def __init__(self):

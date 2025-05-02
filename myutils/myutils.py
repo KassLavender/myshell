@@ -4,7 +4,7 @@ from contextlib import redirect_stdout
 
 
 class Error:
-    """Error utility. Prints the associated exception(s).
+    """Exception handling utility. Prints the associated exception(s).
 
     .__init__(*args:Exception): Formats given Exception arguments as a message, then redirects to print().
     
