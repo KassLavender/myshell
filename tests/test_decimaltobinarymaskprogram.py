@@ -22,32 +22,52 @@ class test_DecimalToBinaryMaskProgram(unittest.TestCase):
 
     def test_negInt(self):
         data = -4
-        answer = "100"
+        answer = "11111100"
         self.convert(data, answer)
     
     def test_posInt(self):
         data = 11
-        answer = "01011"
+        answer = "00001011"
         self.convert(data, answer)
 
     def test_negStr(self):
         data = "-7"
-        answer = "1001"
+        answer = "11111001"
         self.convert(data, answer)
     
     def test_posStr(self):
         data = "12"
-        answer = "01100"
+        answer = "00001100"
         self.convert(data, answer)
-    
+
+    def test_posIntLarge(self):
+        data = 999999
+        answer = "000011110100001000111111"
+        self.convert(data, answer)
+
+    def test_negIntLarge(self):
+        data = -99999
+        answer = "111111100111100101100001"
+        self.convert(data, answer)
+
+    def test_postIntMod8IsZero(self):
+        data = 128
+        answer = "0000000010000000"
+        self.convert(data, answer)
+
+    def test_negIntMod8IsZero(self):
+        data = - 256
+        answer = "1111111100000000"
+        self.convert(data, answer)
+
     def test_zeroInt(self):
         data = 0
-        answer = "0"
+        answer = "00000000"
         self.convert(data, answer)
 
     def test_zeroStr(self):
         data = "0"
-        answer = "0"
+        answer = "00000000"
         self.convert(data, answer)
 
     def test_error_notInt(self):

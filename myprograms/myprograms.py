@@ -29,7 +29,6 @@ class BinaryMaskToDecimalProgram(myProgram):
 
     def BinaryMaskToDecimal(self, integerStr: str | int) -> int:
         sign = 1
-        self.bitList = integerStr
 
         try:
             bitList = [int(i) for i in str(integerStr)]
@@ -106,15 +105,21 @@ class DecimalToBinaryMaskProgram(myProgram):
             
             # Flips bits for negative numbers.
             if sign == 1:
-                for i in range(len(bitList)):
-                    match bitList[i]:
+                for i, val in enumerate(bitList):
+                    match val:
                         case 1: bitList[i] = 0
                         case 0: bitList[i] = 1
 
-            # Inserts the case-signifying bit.
-            bitList.insert(0, sign)
+            # Inserts the case-signifying bit. Increases mask length to the nearest byte.
+            mod = len(bitList) % 8
+            if 8 - mod == 0:
+                for i in range(8):
+                    bitList.insert(0, sign)
+            else:
+                for i in range(8 - mod):
+                    bitList.insert(0, sign)
 
             # Has to be a string, as positive binary integers are prefaced with 0.
             return ''.join(str(x) for x in bitList)
-        except:
-            raise Exception("Unexpected calculation error.")
+        except Exception as e:
+            raise e
