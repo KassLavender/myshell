@@ -11,17 +11,14 @@ class test_DecimalToBinaryMaskProgram(unittest.TestCase):
         try:
             program = myprograms.DecimalToBinaryMaskProgram()
         except* Exception as e:
-            print("There was a problem with testing the DecimalToBinaryMask program.")
-            myutils.Error(*e.exceptions)
-        finally:
+            self.unexpected(*e.exceptions)
+        else:
             self.assertEqual(program.operation(data), answer)
     
-    def errorHandling(self, data: str | int):
-        try:
-            program = myprograms.DecimalToBinaryMaskProgram()
-            program.operation(data)
-        except Exception as e:
-            raise e
+    def unexpected(self, *args):
+        print("There was a problem with testing the DecimalToBinaryMask program.")
+        myutils.Error(*args)
+        raise
 
     def test_negInt(self):
         data = -4
@@ -56,18 +53,14 @@ class test_DecimalToBinaryMaskProgram(unittest.TestCase):
     def test_error_notInt(self):
         data = "123 I am a silly cat"
         answerStr = "Not an integer."
-        error = []
+
+        with self.assertRaises(ValueError) as e:
+            myprograms.DecimalToBinaryMaskProgram().operation(data)
         
-        try:
-            self.errorHandling(data)
-        except* Exception as e:
-            error = [*e.exceptions]
-            
-        if len(error) == 1:
-            self.assertEqual(str(error[0]), answerStr)
-        else:
-            print("There was a problem while testing \"Not an integer\" error handling.")
-            myutils.Error(*error)
+        outputStr = str(e.exception)
+        self.assertEqual(outputStr, answerStr)
+
+
 
 if __name__ == '__main__':
     unittest.main()

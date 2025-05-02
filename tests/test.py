@@ -25,14 +25,14 @@ for t in tests.__remainingTests__:
 for t in keyTests:
     print(f"{t}:")
     result = testRunner.run(keyTests[t])
-    if len(result.failures):
+    if len(result.failures) > 0:
         print("A utility test failed. Fix before remaining tests can be run.")
         exit(1)
 
 for t in remainingTests:
         print(f"{t}:")
         result = testRunner.run(remainingTests[t])
-        if result.failures:
+        if len(result.failures) > 0:
              failures = True
 
 if failures:

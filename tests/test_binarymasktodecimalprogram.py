@@ -11,18 +11,14 @@ class test_BinaryMaskToDecimalProgram(unittest.TestCase):
         try:
             program = myprograms.BinaryMaskToDecimalProgram()
         except* Exception as e:
-            print("There was a problem with testing the BinaryMaskToDecimal program.")
-            myutils.Error(*e.exceptions)
-            
-        if 'program' in locals():
+            self.unexpected(*e.exceptions)
+        else:
             self.assertEqual(program.operation(data), answer)
 
-    def errorHandling(self, data: str | int):
-        try:
-            program = myprograms.BinaryMaskToDecimalProgram()
-            program.operation(data)
-        except Exception as e:
-            raise e
+    def unexpected(self, *args):
+        print("There was a problem with testing the BinaryMaskToDecimal program.")
+        myutils.Error(*args)
+        raise
 
     def test_negInt(self):
         data = 1111100
@@ -52,34 +48,22 @@ class test_BinaryMaskToDecimalProgram(unittest.TestCase):
     def test_error_notInt(self):
         data = "I am a silly cat"
         answerStr = "Not an integer."
-        error = []
+
+        with self.assertRaises(ValueError) as e:
+            myprograms.BinaryMaskToDecimalProgram().operation(data)
         
-        try:
-            self.errorHandling(data)
-        except* Exception as e:
-            error = [*e.exceptions]
-        
-        if len(error) == 1:
-            self.assertEqual(str(error[0]), answerStr)
-        else:
-            print("There was a problem while testing \"Not an integer\" error handling.")
-            myutils.Error(*error)
+        outputStr = str(e.exception)
+        self.assertEqual(outputStr, answerStr)
 
     def test_error_notBinaryInt(self):
         data = "102"
         answerStr = "Not a binary integer."
-        error = []
 
-        try:
-            self.errorHandling(data)
-        except* Exception as e:
-                error = [*e.exceptions]
-
-        if len(error) == 1:
-            self.assertEqual(str(error[0]), answerStr)
-        else:
-            print("There was a problem while testing \"Not a binary integer\" error handling.")
-            myutils.Error(*error)
+        with self.assertRaises(ValueError) as e:
+            myprograms.BinaryMaskToDecimalProgram().operation(data)
+        
+        outputStr = str(e.exception)
+        self.assertEqual(outputStr, answerStr)
 
 
 

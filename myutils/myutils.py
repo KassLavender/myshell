@@ -11,8 +11,8 @@ class Error:
     .print(): Prints all stored Exceptions."""
     def __init__(self, *args: Exception):
         for arg in args:
-            if isinstance(arg, Exception) == False:
-                raise AttributeError("Cannot store Non-Exception object.")
+            if not isinstance(arg, Exception):
+                raise ValueError("Cannot store Non-Exception object.")
             
         self.storedExceptions = []
         self.operation = self.print

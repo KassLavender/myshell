@@ -1,4 +1,5 @@
-from subprocess import run as subprocess_run
+import subprocess
+from os import name as os_name
 
 class MyCommand:
     """A command."""
@@ -24,12 +25,19 @@ class ClearTerminal(MyCommand):
 
         super().__init__()
 
-    def run(self, arg, shell=False):
-        subprocess_run(arg,shell=shell)
+    def getos_name(self):
+        return os_name
 
+    def run(self, arg, shell=False):
+        subprocess.run(arg,shell=shell)
+
+    # While "java" is registered in os.name, jython does not yet support python 3. So I'm not bothering with that.
     def ClearTerminal(self):
         try:
-            self.run("clear||cls", shell=True)
+            if self.getos_name() == "nt":
+                self.run("cls")
+            else:
+                self.run("clear")
         except Exception as e:
             raise Exception(f"An unexpected error occurred with ClearTerminal: {e}")
 
@@ -64,7 +72,7 @@ class ListAll(MyCommand):
             self.programMap = dict(programMap)
             self.commandMap = dict(commandMap)
         except:
-            raise TypeError("ListAll only accepts map objects.")
+            raise ValueError("ListAll only accepts map objects.")
 
         self.operation = self.ListAll
 

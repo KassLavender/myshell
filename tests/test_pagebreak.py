@@ -11,14 +11,13 @@ class test_PageBreak(unittest.TestCase):
 
     def test_PageBreak(self):
         dataStr = "—————————————————————————————\n"
-        answerStr = ""
 
         try:
             testPageBreak = myutils.OutputExtractor(mycommands.PageBreak())
             answerStr = testPageBreak.getOutput()
         except* Exception as e:
             myutils.Error(*e.exceptions)
-        finally:
+        else:
             self.assertEqual(dataStr, answerStr)
 
 
