@@ -102,12 +102,16 @@ class test_ListAll(unittest.TestCase):
 
     def test_error_valueError(self):
         answerStr = "ListAll only accepts map objects."
-
-        with self.assertRaises(ValueError) as e:
-            self.createListAll(4, 5)
         
-        outputStr = str(e.exception)
-        self.assertEqual(outputStr, answerStr)
+        try:
+            with self.assertRaises(ValueError) as e:
+                self.createListAll(4, 5)
+        except* Exception as f:
+            self.unexpected(*f.exceptions)
+        else:
+            outputStr = str(e.exception)
+            self.assertEqual(outputStr, answerStr)
+
 
 
 if __name__ == '__main__':

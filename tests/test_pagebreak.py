@@ -17,6 +17,7 @@ class test_PageBreak(unittest.TestCase):
             answerStr = testPageBreak.getOutput()
         except* Exception as e:
             myutils.Error(*e.exceptions)
+            raise
         else:
             self.assertEqual(dataStr, answerStr)
 

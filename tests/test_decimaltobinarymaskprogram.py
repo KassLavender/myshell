@@ -53,12 +53,15 @@ class test_DecimalToBinaryMaskProgram(unittest.TestCase):
     def test_error_notInt(self):
         data = "123 I am a silly cat"
         answerStr = "Not an integer."
-
-        with self.assertRaises(ValueError) as e:
-            myprograms.DecimalToBinaryMaskProgram().operation(data)
         
-        outputStr = str(e.exception)
-        self.assertEqual(outputStr, answerStr)
+        try:
+            with self.assertRaises(ValueError) as e:
+                myprograms.DecimalToBinaryMaskProgram().operation(data)
+        except* Exception as f:
+            self.unexpected(*f.exceptions)
+        else:
+            outputStr = str(e.exception)
+            self.assertEqual(outputStr, answerStr)
 
 
 

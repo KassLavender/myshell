@@ -48,22 +48,28 @@ class test_BinaryMaskToDecimalProgram(unittest.TestCase):
     def test_error_notInt(self):
         data = "I am a silly cat"
         answerStr = "Not an integer."
-
-        with self.assertRaises(ValueError) as e:
-            myprograms.BinaryMaskToDecimalProgram().operation(data)
         
-        outputStr = str(e.exception)
-        self.assertEqual(outputStr, answerStr)
+        try:
+            with self.assertRaises(ValueError) as e:
+                myprograms.BinaryMaskToDecimalProgram().operation(data)
+        except* Exception as f:
+            self.unexpected(*f.exceptions)
+        else:
+            outputStr = str(e.exception)
+            self.assertEqual(outputStr, answerStr)
 
     def test_error_notBinaryInt(self):
         data = "102"
         answerStr = "Not a binary integer."
 
-        with self.assertRaises(ValueError) as e:
-            myprograms.BinaryMaskToDecimalProgram().operation(data)
-        
-        outputStr = str(e.exception)
-        self.assertEqual(outputStr, answerStr)
+        try:
+            with self.assertRaises(ValueError) as e:
+                myprograms.BinaryMaskToDecimalProgram().operation(data)
+        except* Exception as f:
+            self.unexpected(*f.exceptions)
+        else:
+            outputStr = str(e.exception)
+            self.assertEqual(outputStr, answerStr)
 
 
 

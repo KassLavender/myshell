@@ -46,12 +46,15 @@ class test_OutputExtractor(unittest.TestCase):
 
     def test_error_noOperation(self):
         answerStr = "Given object has no .operation() method."
-
-        with self.assertRaises(AttributeError) as e:
-            myutils.OutputExtractor(self.OperationlessFunction)
-
-        outputStr = str(e.exception)
-        self.assertEqual(outputStr, answerStr)
+        
+        try:
+            with self.assertRaises(AttributeError) as e:
+                myutils.OutputExtractor(self.OperationlessFunction)
+        except* Exception as f:
+            self.unexpected(*f.exceptions)
+        else:
+            outputStr = str(e.exception)
+            self.assertEqual(outputStr, answerStr)
 
 
 
