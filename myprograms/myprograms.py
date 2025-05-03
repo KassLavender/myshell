@@ -30,6 +30,9 @@ class BinaryMaskToDecimalProgram(myProgram):
     def BinaryMaskToDecimal(self, integerStr: str | int) -> int:
         sign = 1
 
+        # Internal mathematic function. 0 and 1 become the other.
+        flipBit = lambda b: (b + 1) % 2
+
         try:
             bitList = [int(i) for i in str(integerStr)]
         except:
@@ -40,21 +43,14 @@ class BinaryMaskToDecimalProgram(myProgram):
                 raise ValueError("Not a binary integer.")
 
         try:
-            match bitList[0]:
-                case 0: sign = 0
-                case 1: sign = 1
+            sign = bitList[0]
 
             for i, val in enumerate(bitList):
                 if sign == 1:
                     # Flip bits for negative binary masks.
-                    match val:
-                        case 0: bitList[i] = "1"
-                        case 1: bitList[i] = "0"
+                    bitList[i] = str(flipBit(val))
                 else:
-                    match val:
-                        case 0: bitList[i] = "0"
-                        case 1: bitList[i] = "1"
-            
+                    bitList[i] = str(val)
             # Converts bitList into a decimal integer.
             match (sign):
                 case 0: return (int("".join(bitList), 2))
@@ -81,22 +77,24 @@ class DecimalToBinaryMaskProgram(myProgram):
         super().__init__()
     
     def DecimalToBinaryMask(self, integerStr: str | int) -> str:  
-        self.bitList = []
-        self.sign = 0
+        bitList = []
+        sign = 0
 
         # Internal bit-masking function. Inserts case-signifying bit(s).
         def mask(num: int):
-            for i in range(num):
-                self.bitList.insert(0,self.sign)
+            for _ in range(num):
+                bitList.insert(0,sign)
 
         # Internal mathematic function. Finds the next power of 2 given a number.
-        def next_power_of_2(num: int):
-            return 2**(num - 1).bit_length()
+        next_power_of_2 = lambda n: 2**(n - 1).bit_length()
+
+        # Internal mathematic function. 0 and 1 become the other.
+        flipBit = lambda b: (b + 1) % 2
 
         try:
             userInt = int(integerStr)
             if userInt < 0:
-                self.sign = 1
+                sign = 1
                 # Two's complement for negative decimal integers.
                 userInt = -userInt - 1
         except:
@@ -106,32 +104,30 @@ class DecimalToBinaryMaskProgram(myProgram):
             # Converts the decimal number into a binary list.
             while userInt > 0:
                 if (userInt % 2):
-                    self.bitList.insert(0, 1)
+                    bitList.insert(0, 1)
                     userInt = (userInt - 1) / 2
                 else:
-                    self.bitList.insert(0, 0)
+                    bitList.insert(0, 0)
                     userInt = userInt / 2
             
             # Flips bits for negative numbers.
-            if self.sign == 1:
-                for i, val in enumerate(self.bitList):
-                    match val:
-                        case 1: self.bitList[i] = 0
-                        case 0: self.bitList[i] = 1
+            if sign == 1:
+                for i, val in enumerate(bitList):
+                    bitList[i] = flipBit(val)
             
             # Masks up to nearest byte.
-            mod = len(self.bitList) % 8
+            mod = len(bitList) % 8
             if 8 - mod == 0:
                 mask(8)
             else:
                 mask(8-mod)
             
             # Masks up to nearest integer power of two number of bytes.
-            bytes = int(len(self.bitList) / 8)
+            bytes = int(len(bitList) / 8)
             bytesToNextPower = next_power_of_2(bytes) - bytes
             mask(8*bytesToNextPower)
 
             # Has to be a string, as positive binary integers are prefaced with 0.
-            return ''.join(str(x) for x in self.bitList)
+            return ''.join(str(x) for x in bitList)
         except Exception as e:
             raise e
