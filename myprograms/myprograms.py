@@ -68,7 +68,7 @@ class BinaryMaskToDecimalProgram(myProgram):
 class DecimalToBinaryMaskProgram(myProgram):
     """"In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100, where 100 is equivalent to 11100 and so forth.
     
-    When given a decimal integer, outputs the string of binary values that would be represented in Python after masking up towards the nearest byte.
+    When given a decimal integer, outputs the string of binary values that would be represented in Python after masking up towards the nearest 2^x bytes (1 byte, 2 bytes, 4 bytes, etc).
     
     The first bit denotes the sign (0 is positive, 1 is negative)."""
     def __init__(self):
@@ -81,13 +81,22 @@ class DecimalToBinaryMaskProgram(myProgram):
         super().__init__()
     
     def DecimalToBinaryMask(self, integerStr: str | int) -> str:  
-        bitList = []
-        sign = 0
+        self.bitList = []
+        self.sign = 0
+
+        # Internal bit-masking function. Inserts case-signifying bit(s).
+        def mask(num: int):
+            for i in range(num):
+                self.bitList.insert(0,self.sign)
+
+        # Internal mathematic function. Finds the next power of 2 given a number.
+        def next_power_of_2(num: int):
+            return 2**(num - 1).bit_length()
 
         try:
             userInt = int(integerStr)
             if userInt < 0:
-                sign = 1
+                self.sign = 1
                 # Two's complement for negative decimal integers.
                 userInt = -userInt - 1
         except:
@@ -97,29 +106,32 @@ class DecimalToBinaryMaskProgram(myProgram):
             # Converts the decimal number into a binary list.
             while userInt > 0:
                 if (userInt % 2):
-                    bitList.insert(0, 1)
+                    self.bitList.insert(0, 1)
                     userInt = (userInt - 1) / 2
                 else:
-                    bitList.insert(0, 0)
+                    self.bitList.insert(0, 0)
                     userInt = userInt / 2
             
             # Flips bits for negative numbers.
-            if sign == 1:
-                for i, val in enumerate(bitList):
+            if self.sign == 1:
+                for i, val in enumerate(self.bitList):
                     match val:
-                        case 1: bitList[i] = 0
-                        case 0: bitList[i] = 1
-
-            # Inserts the case-signifying bit. Increases mask length to the nearest byte.
-            mod = len(bitList) % 8
+                        case 1: self.bitList[i] = 0
+                        case 0: self.bitList[i] = 1
+            
+            # Masks up to nearest byte.
+            mod = len(self.bitList) % 8
             if 8 - mod == 0:
-                for i in range(8):
-                    bitList.insert(0, sign)
+                mask(8)
             else:
-                for i in range(8 - mod):
-                    bitList.insert(0, sign)
+                mask(8-mod)
+            
+            # Masks up to nearest integer power of two number of bytes.
+            bytes = int(len(self.bitList) / 8)
+            bytesToNextPower = next_power_of_2(bytes) - bytes
+            mask(8*bytesToNextPower)
 
             # Has to be a string, as positive binary integers are prefaced with 0.
-            return ''.join(str(x) for x in bitList)
+            return ''.join(str(x) for x in self.bitList)
         except Exception as e:
             raise e

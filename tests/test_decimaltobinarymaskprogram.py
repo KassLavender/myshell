@@ -40,16 +40,6 @@ class test_DecimalToBinaryMaskProgram(unittest.TestCase):
         answer = "00001100"
         self.convert(data, answer)
 
-    def test_posIntLarge(self):
-        data = 999999
-        answer = "000011110100001000111111"
-        self.convert(data, answer)
-
-    def test_negIntLarge(self):
-        data = -99999
-        answer = "111111100111100101100001"
-        self.convert(data, answer)
-
     def test_postIntMod8IsZero(self):
         data = 128
         answer = "0000000010000000"
@@ -58,6 +48,36 @@ class test_DecimalToBinaryMaskProgram(unittest.TestCase):
     def test_negIntMod8IsZero(self):
         data = - 256
         answer = "1111111100000000"
+        self.convert(data, answer)
+        
+    def test_posIntThreeToFourBytes(self):
+        data = 999999
+        answer = "00000000000011110100001000111111"
+        self.convert(data, answer)
+
+    def test_negIntThreeToFourBytes(self):
+        data = -99999
+        answer = "11111111111111100111100101100001"
+        self.convert(data, answer)
+
+    def test_posIntFiveToSixteenBytes(self):
+        data = 274877906944
+        answer = "0000000000000000000000000100000000000000000000000000000000000000"
+        self.convert(data, answer)
+    
+    def test_negIntFiveToSixteenBytes(self):
+        data = -549755813888
+        answer = "1111111111111111111111111000000000000000000000000000000000000000"
+        self.convert(data, answer)
+
+    def test_posIntSevenToSixteenBytes(self):
+        data = 562952985155328
+        answer = "0000000000000010000000000000000010110100101101001001011100000000"
+        self.convert(data, answer)
+
+    def test_negIntSevenToSixteenBytes(self):
+        data = -1125902938576640
+        answer = "1111111111111011111111111111111101001011010010110110100100000000"
         self.convert(data, answer)
 
     def test_zeroInt(self):
