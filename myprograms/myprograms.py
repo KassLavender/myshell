@@ -105,11 +105,10 @@ class DecimalToBinaryMaskProgram(myProgram):
             while userInt > 0:
                 if (userInt % 2):
                     bitList.insert(0, 1)
-                    userInt = (userInt - 1) / 2
+                    userInt = (userInt - 1) // 2
                 else:
                     bitList.insert(0, 0)
-                    userInt = userInt / 2
-            
+                    userInt = userInt // 2
             # Flips bits for negative numbers.
             if sign == 1:
                 for i, val in enumerate(bitList):
