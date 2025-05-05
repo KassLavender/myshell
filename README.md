@@ -1,4 +1,4 @@
-# myShell
+# myshell
 Simple shell terminal created as my project for learning Python and github. Meow!
 
 ### Available Programs:
