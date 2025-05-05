@@ -1,4 +1,4 @@
-#!/opt/homebrew/bin/python3.13
+#!/usr/bin/env python3.13
 
 import unittest
 from unittest.mock import patch

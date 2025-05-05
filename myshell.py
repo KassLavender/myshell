@@ -1,4 +1,4 @@
-#!/opt/homebrew/bin/python3.13
+#!/usr/bin/env python3.13
 
 from mycommands import mycommands
 from myprograms import myprograms
