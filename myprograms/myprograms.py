@@ -51,6 +51,7 @@ class BinaryMaskToDecimalProgram(myProgram):
                     bitList[i] = str(flipBit(val))
                 else:
                     bitList[i] = str(val)
+
             # Converts bitList into a decimal integer.
             match (sign):
                 case 0: return (int("".join(bitList), 2))
@@ -109,6 +110,7 @@ class DecimalToBinaryMaskProgram(myProgram):
                 else:
                     bitList.insert(0, 0)
                     userInt = userInt // 2
+                    
             # Flips bits for negative numbers.
             if sign == 1:
                 for i, val in enumerate(bitList):
