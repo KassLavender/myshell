@@ -32,7 +32,7 @@ class test_Error(unittest.TestCase):
         except Exception as e:
             raise e
 
-    def eval(self, extractor: myutils.OutputExtractor, answer: str):
+    def evaluate(self, extractor: myutils.OutputExtractor, answer: str):
         try:
             self.extractor = extractor
             self.outputStr = self.extractor.getOutput()
@@ -54,7 +54,7 @@ class test_Error(unittest.TestCase):
         except* Exception as e:
             self.unexpected(*e.exceptions)
         else:
-            self.eval(extractor, self.answer0)
+            self.evaluate(extractor, self.answer0)
     
     def test_oneException(self):
         try:
@@ -63,7 +63,7 @@ class test_Error(unittest.TestCase):
         except* Exception as e:
             self.unexpected(*e.exceptions)
         else:
-            self.eval(extractor, self.answer1)
+            self.evaluate(extractor, self.answer1)
 
     def test_twoExceptions(self):
         try:
@@ -72,7 +72,7 @@ class test_Error(unittest.TestCase):
         except* Exception as e:
             self.unexpected(*e.exceptions)
         else:
-            self.eval(extractor, self.answer2)
+            self.evaluate(extractor, self.answer2)
 
     def test_threeExceptions(self):
         try:
@@ -81,7 +81,7 @@ class test_Error(unittest.TestCase):
         except* Exception as e:
             self.unexpected(*e.exceptions)
         else:
-            self.eval(extractor, self.answer3)
+            self.evaluate(extractor, self.answer3)
 
     def test_error_notException(self):
         answerStr = "Cannot store Non-Exception object."

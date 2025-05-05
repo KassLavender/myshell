@@ -37,7 +37,7 @@ class test_ListAll(unittest.TestCase):
         except Exception as e:
             raise e
         
-    def eval(self, extractor: myutils.OutputExtractor, answer: str):
+    def evaluate(self, extractor: myutils.OutputExtractor, answer: str):
         try:
             self.extractor = extractor
             self.outputStr = self.extractor.getOutput()
@@ -58,7 +58,7 @@ class test_ListAll(unittest.TestCase):
         except* Exception as e:
             self.unexpected(*e.exceptions)
         else:
-            self.eval(extractor, self.comboAnswer)
+            self.evaluate(extractor, self.comboAnswer)
 
     def test_empty(self):
         try:
@@ -67,7 +67,7 @@ class test_ListAll(unittest.TestCase):
         except* Exception as e:
             self.unexpected(*e.exceptions)
         else:
-            self.eval(extractor, "")
+            self.evaluate(extractor, "")
     
     def test_onlyPrograms(self):
         try:
@@ -76,7 +76,7 @@ class test_ListAll(unittest.TestCase):
         except* Exception as e:
             self.unexpected(*e.exceptions)
         else:
-            self.eval(extractor, self.programAnswer)
+            self.evaluate(extractor, self.programAnswer)
     
     def test_onlyCommands(self):
         try:
@@ -85,7 +85,7 @@ class test_ListAll(unittest.TestCase):
         except* Exception as e:
             self.unexpected(*e.exceptions)
         else:
-            self.eval(extractor, self.commandAnswer)
+            self.evaluate(extractor, self.commandAnswer)
 
     def test_altDicts(self):
         testProgramDict = {"test": self.TestProgram()}
@@ -98,7 +98,7 @@ class test_ListAll(unittest.TestCase):
         except* Exception as e:
             self.unexpected(*e.exceptions)
         else:
-            self.eval(extractor, testAnswer)
+            self.evaluate(extractor, testAnswer)
 
     def test_error_valueError(self):
         answerStr = "ListAll only accepts map objects."
