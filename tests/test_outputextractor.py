@@ -37,7 +37,7 @@ class test_OutputExtractor(unittest.TestCase):
             silly = self.SillyFunction()
             extractor = myutils.OutputExtractor(silly)
 
-            for i in range(100):
+            for _ in range(100):
                 extractor = myutils.OutputExtractor(extractor)
         except* Exception as e:
             self.unexpected(*e.exceptions)

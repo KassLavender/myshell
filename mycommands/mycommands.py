@@ -65,14 +65,14 @@ class ListAll(MyCommand):
     """Lists all available programs and commands currently available.
     
     Clears the terminal beforehand for legibility."""
-    def __init__(self, programMap: map, commandMap: map):
+    def __init__(self, programMap: dict, commandMap: dict):
         self.name = "ListAll"
 
         try:
             self.programMap = dict(programMap)
             self.commandMap = dict(commandMap)
         except:
-            raise ValueError("ListAll only accepts map objects.")
+            raise ValueError("ListAll only accepts dict objects.")
 
         self.operation = self.ListAll
 

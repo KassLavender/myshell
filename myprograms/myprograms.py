@@ -45,12 +45,11 @@ class BinaryMaskToDecimalProgram(myProgram):
         try:
             sign = bitList[0]
 
-            for i, val in enumerate(bitList):
-                if sign == 1:
-                    # Flip bits for negative binary masks.
-                    bitList[i] = str(flipBit(val))
-                else:
-                    bitList[i] = str(val)
+            # Flip bits for negative binary masks.
+            if sign == 1:
+                bitList = list(map(flipBit, bitList))
+            
+            bitList = list(map(str, bitList))
 
             # Converts bitList into a decimal integer.
             match (sign):
@@ -113,8 +112,7 @@ class DecimalToBinaryMaskProgram(myProgram):
                     
             # Flips bits for negative numbers.
             if sign == 1:
-                for i, val in enumerate(bitList):
-                    bitList[i] = flipBit(val)
+                bitList = list(map(flipBit, bitList))
             
             # Masks up to nearest byte.
             mod = len(bitList) % 8
@@ -124,7 +122,7 @@ class DecimalToBinaryMaskProgram(myProgram):
                 mask(8-mod)
             
             # Masks up to nearest integer power of two number of bytes.
-            bytes = int(len(bitList) / 8)
+            bytes = int(len(bitList) // 8)
             bytesToNextPower = next_power_of_2(bytes) - bytes
             mask(8*bytesToNextPower)
 

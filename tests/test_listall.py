@@ -101,7 +101,7 @@ class test_ListAll(unittest.TestCase):
             self.evaluate(extractor, testAnswer)
 
     def test_error_valueError(self):
-        answerStr = "ListAll only accepts map objects."
+        answerStr = "ListAll only accepts dict objects."
         
         try:
             with self.assertRaises(ValueError) as e:
