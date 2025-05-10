@@ -27,8 +27,9 @@ class test_ClearTerminal(unittest.TestCase):
                 except* Exception as e:
                     self.unexpected(*e.exceptions)
                 else:
-                    subprocess.run.assert_called_once_with("cls")
+                    subprocess.run.assert_called_once_with("cls", shell = True)
 
+    @patch("mycommands.ClearTerminal.getos_name",name_mock("posix"))
     def test_clearTerminalOtherOS(self):
         with patch("mycommands.ClearTerminal.run") as subprocess.run:
             try:

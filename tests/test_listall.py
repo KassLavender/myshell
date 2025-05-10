@@ -113,7 +113,7 @@ class test_ListAll(unittest.TestCase):
     def test_findCommand(self):
         pass
 
-    def test_findProgramNonexistent(self):
+    def test_findCommandNonexistent(self):
         pass
 
     def test_getHelpWithProgram(self):

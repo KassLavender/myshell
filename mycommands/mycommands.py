@@ -34,7 +34,7 @@ class ClearTerminal(MyCommand):
     def ClearTerminal(self):
         try:
             if self.getos_name() == "nt":
-                self.run("cls")
+                self.run('cls', shell = True)
             else:
                 self.run("clear")
         except Exception as e:
@@ -71,7 +71,7 @@ class ListAll(MyCommand):
         self.programNameSpace = {}
         self.commandNameSpace = {}
 
-        def addToNameSpace(d: dict, name: str, inputtedClass = classmethod):
+        def addToNameSpace(d: dict, name: str, inputtedClass: classmethod):
             d[name.lower()] = inputtedClass
 
         try:
