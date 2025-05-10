@@ -13,15 +13,19 @@ class test_ListAll(unittest.TestCase):
     commandDict = {
             "clear": mycommands.ClearTerminal()
         }
-    programAnswer = "Available programs:\n 1: BinaryMaskToDecimal\n\n"
+    programAnswer = "Available programs:\n 1: BinaryMaskToDecimal\n"
     commandAnswer = "Available commands:\n clear\n"
-    comboAnswer = programAnswer + commandAnswer
+    comboAnswer = programAnswer + "\n" + commandAnswer
 
     class TestProgram():
         name = "TestProgram"
     
     class TestCommand():
         name = "TestCommand"
+
+    class TestCommandWithAliases():
+        name = "TestCommand2"
+        aliases = ["secondtest"]
 
     def createListAll(self, program: map, command: map) -> str:
         try:
@@ -88,9 +92,9 @@ class test_ListAll(unittest.TestCase):
             self.evaluate(extractor, self.commandAnswer)
 
     def test_altDicts(self):
-        testProgramDict = {"test": self.TestProgram()}
-        testCommandDict = {"test2": self.TestCommand()}
-        testAnswer = "Available programs:\n test: TestProgram\n\nAvailable commands:\n TestCommand\n"
+        testProgramDict = {"1": self.TestProgram()}
+        testCommandDict = {"command": self.TestCommand(), "empty": None}
+        testAnswer = "Available programs:\n 1: TestProgram\n\nAvailable commands:\n command\n empty\n"
 
         try:
             testList = self.createListAll(testProgramDict, testCommandDict)
@@ -100,7 +104,34 @@ class test_ListAll(unittest.TestCase):
         else:
             self.evaluate(extractor, testAnswer)
 
-    def test_error_valueError(self):
+    def test_findProgram(self):
+        pass
+
+    def test_findProgramNonexistent(self):
+        pass
+
+    def test_findCommand(self):
+        pass
+
+    def test_findProgramNonexistent(self):
+        pass
+
+    def test_getHelpWithProgram(self):
+        pass
+
+    def test_getHelpWithCommand(self):
+        pass
+
+    def test_getHelpWithHelp(self):
+        pass
+
+    def test_getHelpWithQuit(self):
+        pass
+
+    def test_getHelpNonexistent(self):
+        pass
+
+    def test_error_nonDict(self):
         answerStr = "ListAll only accepts dict objects."
         
         try:
@@ -112,7 +143,20 @@ class test_ListAll(unittest.TestCase):
             outputStr = str(e.exception)
             self.assertEqual(outputStr, answerStr)
 
+    def test_error_CommandClassHasNoName(self):
+        pass
 
+    def test_error_ProgramClassHasNoName(self):
+        pass
+
+    def test_error_CommandNameNotStr(self):
+        pass
+
+    def test_error_ProgramNameNotStr(self):
+        pass
+
+    def test_error_ProgramAliasNotStr(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()

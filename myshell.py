@@ -11,8 +11,10 @@ programDictionary = {
 }
 
 commandDictionary = {
-    "list": mycommands.ListAll({},{}),
-    "clear": mycommands.ClearTerminal()
+    "ListAll": mycommands.ListAll(),
+    "clear": mycommands.ClearTerminal(),
+    "help": None,
+    "exit": None
 }
 
 
@@ -31,7 +33,7 @@ except Exception as e:
 
 
 
-while (userInput := input("\n" + "Type a command or program number: ")) not in {"quit", "exit"}:
+while (userInput := input("\nType a command, program, or program number:\n>>> ")) not in {"quit", "exit"}:
     try:
         userInput = userInput.lower()
         PageBreakCommand.operation()
@@ -39,29 +41,40 @@ while (userInput := input("\n" + "Type a command or program number: ")) not in {
 
         match userInput:    
             case "help" | "info":
+                helpInput = input("With what command or program?: ")
                 print()
+                ListAllCommand.getHelp(helpInput.lower())
 
-                #prompt a command or program number, uses .help()
             
             case "list" | "ls" | "list all" | "list" | "listall":
                 ClearTerminalCommand.operation()
                 ListAllCommand.operation()
                 PageBreakCommand.operation()
+                continue
 
             case "clear" | "cls":
                 ClearTerminalCommand.operation()
 
             case _:
-                try:
-                    if userInput not in programDictionary:
-                        print("Not a command nor program.")
-                        continue
 
-                except ValueError:
-                    print("Unexpected error.")
+                if userInput.startswith(prefix := ("help ", "h ")):
+                    userInput = userInput.removeprefix("help ")
+                    # Not yet implemented
+                    continue
 
-                programArgument = input(programDictionary[userInput].prompt)
-                print(programDictionary[userInput].operation(programArgument))
 
+                program = ListAllCommand.findProgram(userInput)
+
+                if program != None:
+                    programArgument = input(program.prompt)
+                    print()
+                    print(program.operation(programArgument))
+                else:
+                    print("Not a command nor program.")
+            
+                
+
+                
+        PageBreakCommand.operation()
     except Exception as e:
         myutils.Error(e)
