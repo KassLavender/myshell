@@ -41,7 +41,7 @@ while (userInput := input("\nType a command, program, or program number:\n>>> ")
 
         match userInput:    
             case "help" | "info":
-                helpInput = input("With what command or program?: ")
+                helpInput = input("With what command or program?:\n>>> ")
                 print()
                 ListAllCommand.getHelp(helpInput.lower())
 

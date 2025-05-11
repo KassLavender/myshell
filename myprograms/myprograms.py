@@ -1,3 +1,8 @@
+from sys import set_int_max_str_digits
+
+#Lets inputted numbers be longer than 4300 digits.
+set_int_max_str_digits(0)
+
 class myProgram:
     """Program object."""
     def __init__(self):
@@ -20,7 +25,7 @@ class BinaryMaskToDecimalProgram(myProgram):
     name = "BinaryMaskToDecimal"
 
     def __init__(self):
-        self.prompt = "Enter a binary integer, prefaced with a signing bit (0 is positive): "
+        self.prompt = "Enter a binary integer, prefaced with a signing bit (0 is positive):\n>>> "
 
         self.operation = self.BinaryMaskToDecimal
 
@@ -69,7 +74,7 @@ class DecimalToBinaryMaskProgram(myProgram):
     name = "DecimalToBinaryMask"
 
     def __init__(self):
-        self.prompt = "Enter a decimal integer: "
+        self.prompt = "Enter a decimal integer:\n>>> "
 
         self.operation = self.DecimalToBinaryMask
 

@@ -188,4 +188,4 @@ class ListAll(MyCommand):
             print("Exits the terminal.")
 
         else:
-            return None
+            print("Command or program not found.")
