@@ -1,8 +1,3 @@
-from sys import set_int_max_str_digits
-
-#Lets inputted numbers be longer than 4300 digits.
-set_int_max_str_digits(0)
-
 class myProgram:
     """Program object."""
     def __init__(self):

@@ -67,45 +67,56 @@ class ListAll(MyCommand):
     name = "ListAll"
     aliases = ["list", "ls", "list all"]
 
-    def __init__(self, ProgramDict: dict = {}, commandDict: dict = {}):
+    def __init__(self, programDict: dict = {}, commandDict: dict = {}):
         self.programNameSpace = {}
         self.commandNameSpace = {}
 
-        def addToNameSpace(d: dict, name: str, inputtedClass: classmethod):
-            d[name.lower()] = inputtedClass
-
+        # Make sure the input is dictionaries
         try:
-            self.ProgramDict = dict(ProgramDict)
+            self.ProgramDict = dict(programDict)
             self.commandDict = dict(commandDict)
-        except:
-            raise ValueError("ListAll only accepts dict objects.")
+        except TypeError:
+            raise TypeError("ListAll only accepts dict objects.")
         
-        # Make sure all programs have a .name string.
-        for prog in self.ProgramDict.values():
-            try:
-                p = prog.name
-            except:
-                raise AttributeError("Program classes must have a name.")
-            else:
-                assert isinstance(p, str), "Program class name is not a string."
+        try:
+            self.__assertCommandsAndPrograms()
+            self.__buildNamespaces()
+        except Exception as e:
+            raise e
+        
+        self.operation = self.ListAll
+
+        super().__init__()
+
+    def __assertCommandsAndPrograms(self):
+        # Make sure all programs have a .name string
+        try:
+            for prog in self.ProgramDict.values():
+                assert isinstance(prog.name, str), "Program class name is not a string."
+        except AttributeError:
+            raise AttributeError("Program classes must have a name.")                
         
         # Make sure all commands that are tied to a class have a .name string.
-        for com in self.commandDict.values():
-            if com!= None:
+        try:
+            for com in filter(None, self.commandDict.values()):
+                assert isinstance(com.name, str), "Command class name is not a string."
+                
+                # Should there be optional aliases, they must be a list of strings.
                 try:
-                    c = com.name
+                    aliases = com.aliases
                 except:
-                    raise AttributeError("Command classes must have a name.")
+                    continue
                 else:
-                    assert isinstance(c, str), "Command class name is not a string."
+                    assert (isinstance(com.aliases, list)), "Command aliases is not a list."
+                    assert all(isinstance(a, str) for a in com.aliases), "Command alias is not a string."
+        except AttributeError:
+            raise AttributeError("Command classes must have a name.")
 
-                    # Should there be optional aliases, they must also be a string.
-                    try:
-                        aliases = c.aliases
-                    except:
-                        continue
-                    else:
-                        assert all(isinstance(a, str) for a in aliases), "Command alias is not a string."
+    def __buildNamespaces(self):
+        def addToNameSpace(d: dict, name: str, inputtedClass: classmethod):
+            if name.lower() in d:
+                raise ValueError(f"Duplicate name or alias: \"{name.lower()}\" already in dictionary.")
+            d[name.lower()] = inputtedClass
 
         try:
             # Associates [class].name and [class].aliases with the program or command class in a namespace.
@@ -115,22 +126,19 @@ class ListAll(MyCommand):
                 addToNameSpace(self.programNameSpace, prog.name, prog)
 
             # Command classes have names, and maybe aliases.
-            for com in self.commandDict.values():
-                if com != None:
-                    addToNameSpace(self.commandNameSpace, com.name, com)
-                    try:
-                        for a in com.aliases:
-                            addToNameSpace(self.commandNameSpace, a, com)
-                    except:
-                        continue
-
+            for com in filter(None, self.commandDict.values()):
+                addToNameSpace(self.commandNameSpace, com.name, com)
+                try:
+                    for a in com.aliases:
+                        addToNameSpace(self.commandNameSpace, a, com)
+                except:
+                    continue
+        # addToNameSpace refuses to put duplicate keys into dictionary.
+        except ValueError as e:
+            raise e
         except Exception as e:
             raise Exception(f"An unexpected error occured with ListAll.findCommand(): {e}")
-        
-        self.operation = self.ListAll
 
-        super().__init__()
-    
     def ListAll(self) -> print:
             try:
                 if self.ProgramDict:
@@ -150,10 +158,10 @@ class ListAll(MyCommand):
 
     def findProgram(self, searchStr: str) -> classmethod | None:
         try:
-            if searchStr in self.ProgramDict:
-                return self.ProgramDict[searchStr]
-            elif searchStr in self.programNameSpace:
-                return self.programNameSpace[searchStr]
+            if searchStr.lower() in self.ProgramDict:
+                return self.ProgramDict[searchStr.lower()]
+            elif searchStr.lower() in self.programNameSpace:
+                return self.programNameSpace[searchStr.lower()]
             else:
                 return None
         except Exception as e:
@@ -161,10 +169,10 @@ class ListAll(MyCommand):
         
     def findCommand(self, searchStr: str) -> classmethod | None:
         try:
-            if searchStr in self.commandDict:
-                return self.commandDict[searchStr]
-            elif searchStr in self.commandNameSpace:
-                return self.commandNameSpace[searchStr]
+            if searchStr.lower() in self.commandDict:
+                return self.commandDict[searchStr.lower()]
+            elif searchStr.lower() in self.commandNameSpace:
+                return self.commandNameSpace[searchStr.lower()]
             else:
                 return None
         except Exception as e:

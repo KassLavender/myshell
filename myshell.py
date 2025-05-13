@@ -4,6 +4,11 @@ from mycommands import mycommands
 from myprograms import myprograms
 from myutils import myutils
 
+from sys import set_int_max_str_digits
+
+#Lets inputted numbers be longer than 4300 digits.
+set_int_max_str_digits(0)
+
 
 programDictionary = {
     "1": myprograms.BinaryMaskToDecimalProgram(),
@@ -36,13 +41,16 @@ except Exception as e:
 while (userInput := input("\nType a command, program, or program number:\n>>> ")) not in {"quit", "exit"}:
     try:
         userInput = userInput.lower()
+        inputList = myutils.Tokenizer(userInput)
         PageBreakCommand.operation()
         print()
 
-        match userInput:    
-            case "help" | "info":
-                helpInput = input("With what command or program?:\n>>> ")
-                print()
+        if len(inputList) == 0:
+            continue
+
+        match inputList[0]:    
+            case "help" | "info" | "h" | "i":
+                helpInput = myutils.Helper(inputList)
                 ListAllCommand.getHelp(helpInput.lower())
 
             
@@ -55,15 +63,11 @@ while (userInput := input("\nType a command, program, or program number:\n>>> ")
             case "clear" | "cls":
                 ClearTerminalCommand.operation()
 
+            case "quit" | "exit":
+                raise SystemExit
+
             case _:
-
-                if userInput.startswith(prefix := ("help ", "h ")):
-                    userInput = userInput.removeprefix("help ")
-                    # Not yet implemented
-                    continue
-
-
-                program = ListAllCommand.findProgram(userInput)
+                program = ListAllCommand.findProgram(inputList[0])
 
                 if program != None:
                     programArgument = input(program.prompt)
