@@ -187,7 +187,7 @@ class ListAll(MyCommand):
 
         elif searchStr in ["help", "info"]:
             print("Runs a program or command's inherited .help() method to print out the associated class's doc string.",
-            "\n\nType \"help\" preceeded by a command, program, or progam number to instantly print its help info.",
+            "\n\nType \"help\" followed by a command, program, or progam number to instantly print its help info.",
             "\nEx:",
             "\n>>> help clear",
             "\nClears the terminal. Works on posix and nt-like systems.")
