@@ -102,11 +102,7 @@ class ListAll(MyCommand):
                 assert isinstance(com.name, str), "Command class name is not a string."
                 
                 # Should there be optional aliases, they must be a list of strings.
-                try:
-                    aliases = com.aliases
-                except:
-                    continue
-                else:
+                if hasattr(com, "aliases"):
                     assert (isinstance(com.aliases, list)), "Command aliases is not a list."
                     assert all(isinstance(a, str) for a in com.aliases), "Command alias is not a string."
         except AttributeError:
@@ -114,6 +110,7 @@ class ListAll(MyCommand):
 
     def __buildNamespaces(self):
         def addToNameSpace(d: dict, name: str, inputtedClass: classmethod):
+            # addToNameSpace refuses to put duplicate keys into dictionary.
             if name.lower() in d:
                 raise ValueError(f"Duplicate name or alias: \"{name.lower()}\" already in dictionary.")
             d[name.lower()] = inputtedClass
@@ -131,7 +128,6 @@ class ListAll(MyCommand):
                 if hasattr(com, "aliases"):
                     for a in com.aliases:
                         addToNameSpace(self.commandNameSpace, a, com)
-        # addToNameSpace refuses to put duplicate keys into dictionary.
         except ValueError as e:
             raise e
         except Exception as e:
