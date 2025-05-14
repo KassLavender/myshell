@@ -1,13 +1,12 @@
 #!/usr/bin/env python3.13
+import sys
 
 from mycommands import mycommands
 from myprograms import myprograms
 from myutils import myutils
 
-from sys import set_int_max_str_digits
-
 #Lets inputted numbers be longer than 4300 digits.
-set_int_max_str_digits(0)
+sys.set_int_max_str_digits(0)
 
 
 programDictionary = {
@@ -69,7 +68,7 @@ while (userInput := input("\nType a command, program, or program number:\n>>> ")
             case _:
                 program = ListAllCommand.findProgram(inputList[0])
 
-                if program != None:
+                if program:
                     programArgument = input(program.prompt)
                     print()
                     print(program.operation(programArgument))

@@ -109,11 +109,12 @@ class ListAll(MyCommand):
             raise AttributeError("Command classes must have a name.")
 
     def __buildNamespaces(self):
-        def addToNameSpace(d: dict, name: str, inputtedClass: classmethod):
+        def addToNameSpace(d: dict, inputtedName: str, inputtedClass: classmethod):
+            name = inputtedName.lower()
             # addToNameSpace refuses to put duplicate keys into dictionary.
-            if name.lower() in d:
-                raise ValueError(f"Duplicate name or alias: \"{name.lower()}\" already in dictionary.")
-            d[name.lower()] = inputtedClass
+            if name in d:
+                raise ValueError(f"Duplicate name or alias: \"{name}\" already in dictionary.")
+            d[name] = inputtedClass
 
         try:
             # Associates [class].name and [class].aliases with the program or command class in a namespace.
@@ -150,33 +151,35 @@ class ListAll(MyCommand):
             except Exception as e:
                 raise Exception(f"An unexpected error occurred with \"ListAll\": {e}")
 
-    def findProgram(self, searchStr: str) -> classmethod | None:
+    def findProgram(self, inputtedSearchStr: str) -> classmethod | None:
         try:
-            if searchStr.lower() in self.ProgramDict:
-                return self.ProgramDict[searchStr.lower()]
-            elif searchStr.lower() in self.programNameSpace:
-                return self.programNameSpace[searchStr.lower()]
+            searchStr = inputtedSearchStr.lower()
+            if searchStr in self.ProgramDict:
+                return self.ProgramDict[searchStr]
+            elif searchStr in self.programNameSpace:
+                return self.programNameSpace[searchStr]
             else:
                 return None
         except Exception as e:
             raise Exception(f"An unexpected error occurred with ListAll.findProgram(): {e}")
         
-    def findCommand(self, searchStr: str) -> classmethod | None:
+    def findCommand(self, inputtedSearchStr: str) -> classmethod | None:
         try:
-            if searchStr.lower() in self.commandDict:
-                return self.commandDict[searchStr.lower()]
-            elif searchStr.lower() in self.commandNameSpace:
-                return self.commandNameSpace[searchStr.lower()]
+            searchStr = inputtedSearchStr.lower()
+            if searchStr in self.commandDict:
+                return self.commandDict[searchStr]
+            elif searchStr in self.commandNameSpace:
+                return self.commandNameSpace[searchStr]
             else:
                 return None
         except Exception as e:
             raise Exception(f"An unexpected error occured with ListAll.findCommand(): {e}")
     
     def getHelp(self, searchStr: str) -> print:
-        if (prog := self.findProgram(searchStr)) != None:
+        if (prog := self.findProgram(searchStr)):
             prog.help()
             
-        elif (com := self.findCommand(searchStr)) != None:
+        elif (com := self.findCommand(searchStr)):
             com.help()
 
         elif searchStr in ["help", "info"]:
