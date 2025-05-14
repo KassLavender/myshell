@@ -128,11 +128,9 @@ class ListAll(MyCommand):
             # Command classes have names, and maybe aliases.
             for com in filter(None, self.commandDict.values()):
                 addToNameSpace(self.commandNameSpace, com.name, com)
-                try:
+                if hasattr(com, "aliases"):
                     for a in com.aliases:
                         addToNameSpace(self.commandNameSpace, a, com)
-                except:
-                    continue
         # addToNameSpace refuses to put duplicate keys into dictionary.
         except ValueError as e:
             raise e

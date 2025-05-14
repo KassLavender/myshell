@@ -208,7 +208,7 @@ class test_ListAll(unittest.TestCase):
     def test_getHelpWithHelp(self):
         helpAnswer = """Runs a program or command's inherited .help() method to print out the associated class's doc string. 
 
-Type "help" preceeded by a command, program, or progam number to instantly print its help info. 
+Type "help" followed by a command, program, or progam number to instantly print its help info. 
 Ex: 
 >>> help clear 
 Clears the terminal. Works on posix and nt-like systems.\n"""
