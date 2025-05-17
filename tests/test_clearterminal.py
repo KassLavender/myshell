@@ -14,9 +14,9 @@ class test_ClearTerminal(unittest.TestCase):
             return name
         return mocked
     
-    def unexpected(self, e):
-        print("An unexpected error occured while testing the ClearTerminal command:")
-        myutils.Error(e)
+    def unexpected(self, *args: Exception):
+        print("There was a problem with testing the ClearTerminal command.")
+        myutils.Error(*args)
         raise
 
     @patch("mycommands.ClearTerminal.getos_name",name_mock("nt"))
@@ -27,8 +27,9 @@ class test_ClearTerminal(unittest.TestCase):
                 except* Exception as e:
                     self.unexpected(*e.exceptions)
                 else:
-                    subprocess.run.assert_called_once_with("cls")
+                    subprocess.run.assert_called_once_with("cls", shell = True)
 
+    @patch("mycommands.ClearTerminal.getos_name",name_mock("posix"))
     def test_clearTerminalOtherOS(self):
         with patch("mycommands.ClearTerminal.run") as subprocess.run:
             try:

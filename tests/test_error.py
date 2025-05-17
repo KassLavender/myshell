@@ -87,7 +87,7 @@ class test_Error(unittest.TestCase):
         answerStr = "Cannot store Non-Exception object."
         
         try:
-            with self.assertRaises(ValueError) as e:
+            with self.assertRaises(AssertionError) as e:
                 self.createError("I am a silly cat")
         except* Exception as f:
             self.unexpected(*f.exceptions)

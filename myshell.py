@@ -1,8 +1,12 @@
 #!/usr/bin/env python3.13
+import sys
 
 from mycommands import mycommands
 from myprograms import myprograms
 from myutils import myutils
+
+#Lets inputted numbers be longer than 4300 digits.
+sys.set_int_max_str_digits(0)
 
 
 programDictionary = {
@@ -11,8 +15,10 @@ programDictionary = {
 }
 
 commandDictionary = {
-    "list": mycommands.ListAll({},{}),
-    "clear": mycommands.ClearTerminal()
+    "ListAll": mycommands.ListAll(),
+    "clear": mycommands.ClearTerminal(),
+    "help": None,
+    "exit": None
 }
 
 
@@ -31,37 +37,47 @@ except Exception as e:
 
 
 
-while (userInput := input("\n" + "Type a command or program number: ")) not in {"quit", "exit"}:
+while (userInput := input("\nType a command, program, or program number:\n>>> ")) not in {"quit", "exit"}:
     try:
         userInput = userInput.lower()
+        inputList = myutils.Tokenizer(userInput)
         PageBreakCommand.operation()
         print()
 
-        match userInput:    
-            case "help" | "info":
-                print()
+        if len(inputList) == 0:
+            continue
 
-                #prompt a command or program number, uses .help()
+        match inputList[0]:    
+            case "help" | "info" | "h" | "i":
+                helpInput = myutils.Helper(inputList)
+                ListAllCommand.getHelp(helpInput.lower())
+
             
             case "list" | "ls" | "list all" | "list" | "listall":
                 ClearTerminalCommand.operation()
                 ListAllCommand.operation()
                 PageBreakCommand.operation()
+                continue
 
             case "clear" | "cls":
                 ClearTerminalCommand.operation()
 
+            case "quit" | "exit":
+                raise SystemExit
+
             case _:
-                try:
-                    if userInput not in programDictionary:
-                        print("Not a command nor program.")
-                        continue
+                program = ListAllCommand.findProgram(inputList[0])
 
-                except ValueError:
-                    print("Unexpected error.")
+                if program:
+                    programArgument = input(program.prompt)
+                    print()
+                    print(program.operation(programArgument))
+                else:
+                    print("Not a command nor program.")
+            
+                
 
-                programArgument = input(programDictionary[userInput].prompt)
-                print(programDictionary[userInput].operation(programArgument))
-
+                
+        PageBreakCommand.operation()
     except Exception as e:
         myutils.Error(e)

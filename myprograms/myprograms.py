@@ -3,12 +3,11 @@ class myProgram:
     def __init__(self):
         self.manual = self.__doc__
     
-    def help(self) -> list[str]:
+    def help(self) -> print:
         try:
-            for line in self.manual:
-                print(line)
+            print(self.manual)
         except Exception as e:
-            raise Exception(f"An unexpected error with printing help info: {e}")
+            raise Exception(f"An unexpected error occurred with printing help info: {e}")
 
 
 
@@ -18,10 +17,10 @@ class BinaryMaskToDecimalProgram(myProgram):
     When given a string of binary values, outputs the decimal integer that would be represented in Python after demasking.
     
     The first bit in the string of binary values denotes the sign (0 is positive, 1 is negative)."""
-    def __init__(self):
-        self.name = "BinaryMaskToDecimal"
+    name = "BinaryMaskToDecimal"
 
-        self.prompt = "Enter a binary integer, prefaced with a signing bit (0 is positive): "
+    def __init__(self):
+        self.prompt = "Enter a binary integer, prefaced with a signing bit (0 is positive):\n>>> "
 
         self.operation = self.BinaryMaskToDecimal
 
@@ -67,10 +66,10 @@ class DecimalToBinaryMaskProgram(myProgram):
     When given a decimal integer, outputs the string of binary values that would be represented in Python after masking up towards the nearest 2^x bytes (1 byte, 2 bytes, 4 bytes, etc).
     
     The first bit denotes the sign (0 is positive, 1 is negative)."""
-    def __init__(self):
-        self.name = "DecimalToBinaryMask"
+    name = "DecimalToBinaryMask"
 
-        self.prompt = "Enter a decimal integer: "
+    def __init__(self):
+        self.prompt = "Enter a decimal integer:\n>>> "
 
         self.operation = self.DecimalToBinaryMask
 
