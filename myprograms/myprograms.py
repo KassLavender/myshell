@@ -1,32 +1,48 @@
-class myProgram:
+"""Program module.
+Programs for the user to run, perhaps with one or more instances of input."""
+
+import re
+
+
+
+class MyProgram:
     """Program object."""
-    def __init__(self):
-        self.manual = self.__doc__
-    
-    def help(self) -> print:
+    @classmethod    
+    def help(command):
+        """Prints the `__doc__` string of the class.
+        
+        First cleans out any backtick marks, and `ReST`-type dockstring lines."""
         try:
-            print(self.manual)
+            help = re.sub("`", "", command.__doc__)
+            help = re.sub(r":param \w* ", "", help)
+            print(help)
         except Exception as e:
             raise Exception(f"An unexpected error occurred with printing help info: {e}")
 
 
 
-class BinaryMaskToDecimalProgram(myProgram):
+class BinaryMaskToDecimalProgram(MyProgram):
     """In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100, where 100 is equivalent to 11100 and so forth.
     
     When given a string of binary values, outputs the decimal integer that would be represented in Python after demasking.
     
-    The first bit in the string of binary values denotes the sign (0 is positive, 1 is negative)."""
+    The first bit in the string of binary values denotes the sign (0 is positive, 1 is negative).
+    
+    :param str name: `BinaryMaskToDecimal`"""
     name = "BinaryMaskToDecimal"
 
     def __init__(self):
+        """Initializes the program.
+
+        :param str prompt: Prompt asking for a binary mask.
+        :param classmethod operation: links to `Self.BinaryMaskToDecimal`.
+        """
         self.prompt = "Enter a binary integer, prefaced with a signing bit (0 is positive):\n>>> "
 
         self.operation = self.BinaryMaskToDecimal
 
-        super().__init__()
-
     def BinaryMaskToDecimal(self, integerStr: str | int) -> int:
+        """Interprets a given string of 0s and 1s in the format of a binary mask, and returns the associated decimal integer."""
         sign = 1
 
         # Internal mathematic function. 0 and 1 become the other.
@@ -51,7 +67,7 @@ class BinaryMaskToDecimalProgram(myProgram):
             bitList = list(map(str, bitList))
 
             # Converts bitList into a decimal integer.
-            match (sign):
+            match sign:
                 case 0: return (int("".join(bitList), 2))
                 # Add 1 for two's complement.
                 case 1: return -(int("".join((bitList)), 2) + 1)
@@ -60,22 +76,27 @@ class BinaryMaskToDecimalProgram(myProgram):
 
 
 
-class DecimalToBinaryMaskProgram(myProgram):
+class DecimalToBinaryMaskProgram(MyProgram):
     """"In order to allow bit-wise operations, python represents negative integers e.g. -4 as 111....11100, where 100 is equivalent to 11100 and so forth.
     
     When given a decimal integer, outputs the string of binary values that would be represented in Python after masking up towards the nearest 2^x bytes (1 byte, 2 bytes, 4 bytes, etc).
     
-    The first bit denotes the sign (0 is positive, 1 is negative)."""
+    The first bit denotes the sign (0 is positive, 1 is negative).
+    
+    :param str name: `DecimalToBinaryMask`"""
     name = "DecimalToBinaryMask"
 
     def __init__(self):
+        """Initializes the program.
+
+        :param str prompt: Asks for a decimal integer.
+        :param classmethod operation: links to `Self.DecimalToBinaryMask`."""
         self.prompt = "Enter a decimal integer:\n>>> "
 
         self.operation = self.DecimalToBinaryMask
-
-        super().__init__()
     
-    def DecimalToBinaryMask(self, integerStr: str | int) -> str:  
+    def DecimalToBinaryMask(self, integerStr: str | int) -> str:
+        """Interprets a given decimal integer, and returns the associated binary mask."""  
         bitList = []
         sign = 0
 

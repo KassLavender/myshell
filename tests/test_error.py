@@ -41,7 +41,7 @@ class test_Error(unittest.TestCase):
         else:
             self.assertEqual(self.outputStr, answer)
 
-    def unexpected(self, *args: Exception) -> print:
+    def unexpected(self, *args: Exception):
         print("There was a problem with creating a problem to be displayed by the error utility.")
         for arg in args:
             print(arg)
