@@ -1,37 +1,57 @@
+"""Command module.
+Useful commands for myshell to manage the presentation of information in the terminal, and to find information on programs and classes to which myshell has access."""
+
+import re
 import subprocess
 from os import name as os_name
 
+from myprograms.myprograms import MyProgram
+
+
+
 class MyCommand:
-    """A command."""
-    def __init__(self):
-        self.manual = self.__doc__
-    
-    def help(self) -> print:
+    """Command object."""
+    @classmethod    
+    def help(command):
+        """Prints the `__doc__` string of the class.
+        
+        First cleans out any backtick marks, and `ReST`-type dockstring lines."""
         try:
-            print(self.manual)
+            help = re.sub("`", "", command.__doc__)
+            # ":param int number:" becomes "number:"
+            help = re.sub(r":param \w* ", "", help)
+            print(help)
         except Exception as e:
             raise Exception(f"An unexpected error occurred with printing help info: {e}")
 
 
 
 class ClearTerminal(MyCommand):
-    """Clears the terminal. Works on posix and nt-like systems."""
+    """Clears the terminal. Works on posix and nt-like systems.
+    
+    :param str name: `\"clear\"`
+    :param lst aliases: `[\"cls\"]`"""
     name = "Clear"
     aliases = ["cls"]
 
     def __init__(self):
+        """creates a ClearTerminal object.
+
+        :param classmethod operation: set to `Clearterminal.ClearTerminal`
+        """
         self.operation = self.ClearTerminal
 
-        super().__init__()
-
     def getos_name(self):
+        """Determines what operating system namespace is ClearTerminal being run on."""
         return os_name
 
     def run(self, arg, shell=False):
+        """Allows processes to run commands in terminal with arguments."""
         subprocess.run(arg,shell=shell)
 
     # While "java" is registered in os.name, jython does not yet support python 3. So I'm not bothering with that.
     def ClearTerminal(self):
+        """For nt and posix systems, attempts to run a clear terminal command through a subprocess."""
         try:
             if self.getos_name() == "nt":
                 self.run('cls', shell = True)
@@ -43,16 +63,19 @@ class ClearTerminal(MyCommand):
 
 
 class PageBreak(MyCommand):
-    """Prints a long line and then moves to the next line of the terminal."""
+    """Prints a long line and then moves to the next line of the terminal.
+    
+    :param str name: `"PageBreak"`"""
 
     name = "PageBreak"
 
     def __init__(self):
+        """Creates a PageBreak object.
+        
+        :param classmethod operation: points to `self.PageBreak`."""
         self.operation = self.PageBreak
 
-        super().__init__()
-
-    def PageBreak(self) -> print:
+    def PageBreak(self):
         try:
             print("—————————————————————————————")
         except Exception as e:
@@ -62,18 +85,30 @@ class PageBreak(MyCommand):
 
 class ListAll(MyCommand):
     """Lists all available programs and commands currently available.
+
+    Clears the terminal beforehand for legibility.
     
-    Clears the terminal beforehand for legibility."""
+    :param str name: `ListAll`
+    :param list aliases: `["list", "ls", "list all"]`"""
     name = "ListAll"
     aliases = ["list", "ls", "list all"]
 
     def __init__(self, programDict: dict = {}, commandDict: dict = {}):
+        """Builds namespaces for given dictionaries of programs and commands.
+        
+        :param dict programDict: Stores the given `programDict` dictionary.
+        :param dict commandDict: Stores the given `commandDict` dictionary.
+        :param dict programNameSpace: All `name`s of programs are tied to the programs themselves and are therefore callable using the `name`s.
+        :param dict commandNameSpace: Same as for programs, but also including `aliases` of commands.
+        :param classmethod _assertCommandsAndPrograms: Makes sure given `programDict` and `commandDict` dictionaries have commands and programs of the correct format to be processed by the namespaces.
+        :param classmethod _buildNameSpace: Builds the namespace dictionaries using the given 'programDict' and 'commandDict' dictionaries.
+        :param classmethod operation: Points to `self.ListAll`."""
         self.programNameSpace = {}
         self.commandNameSpace = {}
 
         # Make sure the input is dictionaries
         try:
-            self.ProgramDict = dict(programDict)
+            self.programDict = dict(programDict)
             self.commandDict = dict(commandDict)
         except TypeError:
             raise TypeError("ListAll only accepts dict objects.")
@@ -86,12 +121,13 @@ class ListAll(MyCommand):
         
         self.operation = self.ListAll
 
-        super().__init__()
-
     def __assertCommandsAndPrograms(self):
+        """Called automatically through the :method:`__init__` process.
+        
+        Makes sure that all programs and commands have `name`s of the proper format, and if commands have `aliases` that they are of the proper format."""
         # Make sure all programs have a .name string
         try:
-            for prog in self.ProgramDict.values():
+            for prog in self.programDict.values():
                 assert isinstance(prog.name, str), "Program class name is not a string."
         except AttributeError:
             raise AttributeError("Program classes must have a name.")                
@@ -109,6 +145,9 @@ class ListAll(MyCommand):
             raise AttributeError("Command classes must have a name.")
 
     def __buildNamespaces(self):
+        """Called automatically through the :method:`__init__` process.
+        
+        Builds the namespace dictionaries from the program's `commandDict` and `programDict` dictionaries."""
         def addToNameSpace(d: dict, inputtedName: str, inputtedClass: classmethod):
             name = inputtedName.lower()
             # addToNameSpace refuses to put duplicate keys into dictionary.
@@ -120,7 +159,7 @@ class ListAll(MyCommand):
             # Associates [class].name and [class].aliases with the program or command class in a namespace.
 
             # Program classes have names.
-            for prog in self.ProgramDict.values():
+            for prog in self.programDict.values():
                 addToNameSpace(self.programNameSpace, prog.name, prog)
 
             # Command classes have names, and maybe aliases.
@@ -134,14 +173,15 @@ class ListAll(MyCommand):
         except Exception as e:
             raise Exception(f"An unexpected error occured with ListAll.findCommand(): {e}")
 
-    def ListAll(self) -> print:
+    def ListAll(self):
+            """Prints all programs and commands in `programDict` and `commandDict` to terminal, formatted for readability."""
             try:
-                if self.ProgramDict:
+                if self.programDict:
                     print("Available programs:")
-                    for i in self.ProgramDict.keys():
-                        print(f" {str(i)}: {self.ProgramDict[i].name}")
+                    for i in self.programDict.keys():
+                        print(f" {str(i)}: {self.programDict[i].name}")
 
-                if self.ProgramDict and self.commandDict:
+                if self.programDict and self.commandDict:
                     print()
 
                 if self.commandDict:
@@ -151,11 +191,12 @@ class ListAll(MyCommand):
             except Exception as e:
                 raise Exception(f"An unexpected error occurred with \"ListAll\": {e}")
 
-    def findProgram(self, inputtedSearchStr: str) -> classmethod | None:
+    def findProgram(self, inputtedSearchStr: str) -> MyProgram | None:
+        """Finds a program by name in `programDict` or in the program namespace. If found, returns that program."""
         try:
             searchStr = inputtedSearchStr.lower()
-            if searchStr in self.ProgramDict:
-                return self.ProgramDict[searchStr]
+            if searchStr in self.programDict:
+                return self.programDict[searchStr]
             elif searchStr in self.programNameSpace:
                 return self.programNameSpace[searchStr]
             else:
@@ -163,7 +204,8 @@ class ListAll(MyCommand):
         except Exception as e:
             raise Exception(f"An unexpected error occurred with ListAll.findProgram(): {e}")
         
-    def findCommand(self, inputtedSearchStr: str) -> classmethod | None:
+    def findCommand(self, inputtedSearchStr: str) -> MyCommand | None:
+        """Finds a command by name in `commandDict` or in the command namespace. If found, returns that command."""
         try:
             searchStr = inputtedSearchStr.lower()
             if searchStr in self.commandDict:
@@ -174,8 +216,13 @@ class ListAll(MyCommand):
                 return None
         except Exception as e:
             raise Exception(f"An unexpected error occured with ListAll.findCommand(): {e}")
-    
-    def getHelp(self, searchStr: str) -> print:
+        
+    def getHelp(self, searchStr: str):
+        """Takes a search string, and tries to find a program or command with that particular name. Then, uses the program or class's `help` method to print the information to the terminal.
+        
+        Also contains help information for "help" or "quit", which are pseudocommands for :module:`myshell`.
+        
+        Otherwise, states that the command or program was not found."""
         if (prog := self.findProgram(searchStr)):
             prog.help()
             

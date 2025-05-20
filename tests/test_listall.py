@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.13
 
 import unittest
+import re
 
 from context import mycommands, myprograms, myutils
 
@@ -60,7 +61,15 @@ class test_ListAll(unittest.TestCase):
             return extractor
         except Exception as e:
             raise e
-        
+
+    def regexify(self, doc: str) -> str:
+        try:
+            regexed = re.sub("`", "", doc)
+            regexed = re.sub(r":param \w* ", "", regexed)
+            return regexed
+        except* Exception as e:
+            self.unexpected(*e.exceptions)
+
     def evaluate(self, extractor: myutils.OutputExtractor, answer: str):
         try:
             self.extractor = extractor
@@ -70,7 +79,7 @@ class test_ListAll(unittest.TestCase):
         else:
             self.assertEqual(self.outputStr, answer)
 
-    def unexpected(self, *args: Exception) -> print:
+    def unexpected(self, *args: Exception):
         print("There was a problem with testing the ListAll command.")
         myutils.Error(*args)
         raise
@@ -171,6 +180,7 @@ class test_ListAll(unittest.TestCase):
 
     def test_getHelpWithProgram(self):
         helpAnswer = myprograms.BinaryMaskToDecimalProgram.__doc__ + "\n"
+        helpAnswer = self.regexify(helpAnswer)
         
         try:
             testList = self.createListAll(self.programDict, self.commandDict)
@@ -183,6 +193,7 @@ class test_ListAll(unittest.TestCase):
         
     def test_getHelpWithCommandByName(self):
         helpAnswer = mycommands.ClearTerminal.__doc__ + "\n"
+        helpAnswer = self.regexify(helpAnswer)
         
         try:
             testList = self.createListAll(self.programDict, self.commandDict)
@@ -195,6 +206,7 @@ class test_ListAll(unittest.TestCase):
 
     def test_getHelpWithCommandByAlias(self):
         helpAnswer = mycommands.ClearTerminal.__doc__ + "\n"
+        helpAnswer = self.regexify(helpAnswer)
         
         try:
             testList = self.createListAll(self.programDict, self.commandDict)

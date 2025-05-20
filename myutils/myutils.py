@@ -1,15 +1,19 @@
+"""Utility module.
+Useful utilities for myshell and as well as unit tests to manage Exception handling, to extract command or program print output while redirecting std_out, and to manage user input for the `myshell` for redirection.
+"""
+
 from io import StringIO
 from contextlib import redirect_stdout
 
 
 
 class Error:
-    """Exception handling utility. Prints the associated exception(s).
-
-    .__init__(*args:Exception): Formats given Exception arguments as a message, then redirects to print().
-    
-    .print(): Prints all stored Exceptions."""
+    """Exception handling utility. Prints the associated Exception(s)."""
     def __init__(self, *args: Exception):
+        """When initialized, formats given :class:`Exception`s to a list, then automatically prints using :method:`Error.print`.
+        
+        :param list storedExceptions: takes gives `Exception`s, and formats them to be a clear message.
+        :param classmethod operation: linked to `Error.print`."""
         assert all(isinstance(arg, Exception) for arg in args), "Cannot store Non-Exception object."
             
         self.storedExceptions = []
@@ -22,7 +26,8 @@ class Error:
         except Exception as e:
             raise Exception(f"An unexpected error occurred with the Error handler instantiation: {e}")
 
-    def print(self) -> print:
+    def print(self):
+        """Called automatically with :classmethod:"""
         try:
             for error in self.storedExceptions:
                 print(error)
@@ -36,6 +41,11 @@ class OutputExtractor:
     
     For situations when the output needs to be comparable or hidden, such as during unit testing."""
     def __init__(self, givenClass: classmethod):
+        """Initializes the OutputExtractor. Requires a given program or command or util with an `operation` method.
+        
+        :param classmethod storedClass: stores the :classmethod:`givenClass` object.
+        
+        :param classmethod operation: points to the stored class's `operation` method."""
         assert hasattr(givenClass, 'operation'), "Given object has no .operation() method."
         
         self.storedClass = givenClass
@@ -80,9 +90,12 @@ def Tokenizer(userInput: str) -> list[str]:
 
 def Helper(inputList: list[str]) -> str:
     """Manager for pulling help info.
-    If the inputList length is 1, asks for a particular name of a command or program.
-    If the length is 2, the second "word" must be the name of the command or program itself.
-    If the length is any longer, trims everything beyond the second "word", and runs itself with length 2."""
+
+    If the :list:`inputList` length is 1 (or, one "word"), asks for a particular name of a command or program, then returns the first "word".
+
+    If the length is 2 or longer, the second "word" must be the name of the command or program itself, so it returns that.
+    
+    Returns nothing if :list:`inputList` has no length."""
     assert isinstance(inputList, list), "Helper can only accept a list of words as input."
     assert all(isinstance(a, str) for a in inputList), "Helper can only accept a list of words as input."
     try:
@@ -90,12 +103,10 @@ def Helper(inputList: list[str]) -> str:
             case 0:
                 return None
             case 1:
-                helpInput = input("With what command or program?:\n>>> ")
+                helpInput = input("With what command or program?:\n>>> ").split()
                 print()
-                return helpInput
-            case 2:
-                return inputList[1].lower()
+                return helpInput[0].lower()
             case _:
-                return Helper(inputList[:2])
+                return inputList[1].lower()
     except Exception as e:
         raise Exception(f"An unexpected error occurred with the helper util: {e}")
