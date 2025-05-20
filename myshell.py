@@ -1,18 +1,20 @@
+#!/usr/bin/env python3.13
+
 """Shell program.
 
 Lets users run programs and commands, which looks pretty on terminals.
 
 Works on POSIX and NT systems. Go to https://github.com/KassLavender/myshell for any additional help."""
 
-#!/usr/bin/env python3.13
 import sys
 
-from mycommands import mycommands
-from myprograms import myprograms
-from myutils import myutils
+import myutils
+import mycommands
+import myprograms
 
 #Lets inputted numbers be longer than 4300 digits.
 sys.set_int_max_str_digits(0)
+
 
 
 programDictionary = {
