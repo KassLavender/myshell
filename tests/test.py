@@ -1,8 +1,10 @@
+#!/usr/bin/env python3.13
+
 """Test utility for myshell.
 
 When run, tests every test in the ./test/ folder. Runs the Error and OutputExtractor tests first, because they are more critical for the other tests to work properly."""
 
-#!/usr/bin/env python3.13
+
 
 import unittest
 
